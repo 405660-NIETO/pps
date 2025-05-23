@@ -21,10 +21,12 @@ public class DetalleFacturaEntity {
     private FacturaEntity factura;
 
     @ManyToOne
-    @JoinColumn(name = "producto_id")
+    @JoinColumn(name = "producto_id",  nullable = false)
     private ProductoEntity producto;
 
+    @Column(nullable = false)
     private Double precio;
 
+    @Column(nullable = false)
     private Integer cantidad;
 }

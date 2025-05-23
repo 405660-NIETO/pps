@@ -16,6 +16,7 @@ public class FormaPagoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String nombre;
 
     private Boolean activo;
