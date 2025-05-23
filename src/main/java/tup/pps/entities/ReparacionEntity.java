@@ -32,6 +32,7 @@ public class ReparacionEntity {
     @JoinColumn(name = "factura_id")
     private FacturaEntity factura;
 
+    @Column(nullable = false)
     private Double precio;
 
 
