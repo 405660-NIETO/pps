@@ -26,5 +26,6 @@ public class SubscripcionEntity {
 
     private LocalDateTime fechaBaja;
 
+    @Column(nullable = false)
     private Boolean activo;
 }

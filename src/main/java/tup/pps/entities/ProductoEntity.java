@@ -24,7 +24,7 @@ public class ProductoEntity {
     private String fotoUrl;
 
     @ManyToOne
-    @JoinColumn(name = "marca_id")
+    @JoinColumn(name = "marca_id", nullable = false)
     private MarcaEntity marca;
 
     @Column(nullable = false)
@@ -33,5 +33,6 @@ public class ProductoEntity {
     @Column(nullable = false)
     private Double precio;
 
+    @Column(nullable = false)
     private Boolean activo;
 }

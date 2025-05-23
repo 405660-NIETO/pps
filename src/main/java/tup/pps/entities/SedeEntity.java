@@ -22,5 +22,6 @@ public class SedeEntity {
     @Column(nullable = false, unique = true)
     private String direccion;
 
+    @Column(nullable = false)
     private Boolean activo;
 }

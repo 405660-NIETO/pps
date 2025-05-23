@@ -19,5 +19,6 @@ public class RolEntity {
     @Column(nullable = false)
     private String nombre;
 
+    @Column(nullable = false)
     private Boolean activo;
 }

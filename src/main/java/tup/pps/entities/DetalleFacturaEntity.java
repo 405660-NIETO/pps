@@ -17,7 +17,7 @@ public class DetalleFacturaEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "factura_id")
+    @JoinColumn(name = "factura_id",  nullable = false)
     private FacturaEntity factura;
 
     @ManyToOne

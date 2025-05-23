@@ -22,11 +22,11 @@ public class FacturaEntity {
     private LocalDateTime fecha;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuario_id", nullable = false)
     private UsuarioEntity usuario;
 
     @ManyToOne
-    @JoinColumn(name = "forma_pago_id")
+    @JoinColumn(name = "forma_pago_id", nullable = false)
     private FormaPagoEntity formaPago;
 
     @ManyToOne

@@ -19,7 +19,7 @@ public class ReparacionEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuario_id", nullable = false)
     private UsuarioEntity usuario;
 
     private String detalles;
@@ -35,6 +35,6 @@ public class ReparacionEntity {
     @Column(nullable = false)
     private Double precio;
 
-
+    @Column(nullable = false)
     private Boolean activo;
 }

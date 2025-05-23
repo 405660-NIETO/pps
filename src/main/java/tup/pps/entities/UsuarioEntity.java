@@ -31,12 +31,13 @@ public class UsuarioEntity {
     private String apellido;
 
     @ManyToOne
-    @JoinColumn(name = "rol_id")
+    @JoinColumn(name = "rol_id", nullable = false)
     private RolEntity rol;
 
     private LocalDateTime fechaCreacion;
 
     private LocalDateTime fechaLogin;
 
+    @Column(nullable = false)
     private Boolean activo;
 }

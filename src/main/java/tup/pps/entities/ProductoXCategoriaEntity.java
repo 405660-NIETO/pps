@@ -17,10 +17,10 @@ public class ProductoXCategoriaEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "producto_id")
+    @JoinColumn(name = "producto_id", nullable = false)
     private ProductoEntity producto;
 
     @ManyToOne
-    @JoinColumn(name = "categoria_id")
+    @JoinColumn(name = "categoria_id", nullable = false)
     private CategoriaEntity categoria;
 }
