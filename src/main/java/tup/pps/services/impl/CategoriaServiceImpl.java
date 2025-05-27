@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tup.pps.entities.CategoriaEntity;
+import tup.pps.exceptions.EntryNotFoundException;
 import tup.pps.models.Categoria;
 import tup.pps.repositories.CategoriaRepository;
 import tup.pps.services.CategoriaService;
@@ -33,7 +34,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     public Categoria findById(Long id) {
         return repository.findById(id)
                 .map(entity -> modelMapper.map(entity, Categoria.class))
-                .orElseThrow(() -> new NoSuchElementException("Categoria Not Found"));
+                .orElseThrow(() -> new EntryNotFoundException("Categoria Not Found"));
     }
 
     @Override
