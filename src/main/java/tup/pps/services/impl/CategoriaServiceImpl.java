@@ -4,13 +4,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tup.pps.entities.CategoriaEntity;
+import tup.pps.exceptions.ConflictiveStateException;
 import tup.pps.exceptions.EntryNotFoundException;
+import tup.pps.exceptions.ResourceAlreadyExistsException;
 import tup.pps.models.Categoria;
 import tup.pps.repositories.CategoriaRepository;
 import tup.pps.services.CategoriaService;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -34,7 +35,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     public Categoria findById(Long id) {
         return repository.findById(id)
                 .map(entity -> modelMapper.map(entity, Categoria.class))
-                .orElseThrow(() -> new EntryNotFoundException("Categoria Not Found"));
+                .orElseThrow(() -> new EntryNotFoundException("No se encontro ninguna categoria con ese ID"));
     }
 
     @Override
@@ -42,7 +43,7 @@ public class CategoriaServiceImpl implements CategoriaService {
         Optional<CategoriaEntity> categoriaOpcional = repository.findByNombre(categoria.getNombre());
         if(categoriaOpcional.isPresent()) {
             if(categoriaOpcional.get().getActivo()) {
-                throw new IllegalStateException("Categoria Activo");
+                throw new ResourceAlreadyExistsException("Ya hay una categoria con ese nombre");
             }
             else {
                 categoriaOpcional.get().setActivo(true);
@@ -61,10 +62,10 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Override
     public void delete(String nombre) {
         CategoriaEntity entity = repository.findByNombre(nombre)
-                .orElseThrow(() -> new NoSuchElementException("Categoria Not Found"));
+                .orElseThrow(() -> new EntryNotFoundException("No se encontro una categoria con ese nombre"));
 
         if(!entity.getActivo()) {
-            throw new IllegalStateException("La categoria ya esta desactivada");
+            throw new ConflictiveStateException("La categoria ya esta desactivada");
         }
 
         entity.setActivo(false);
