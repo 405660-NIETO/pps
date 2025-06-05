@@ -2,6 +2,9 @@ package tup.pps.services.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import tup.pps.entities.CategoriaEntity;
 import tup.pps.exceptions.ConflictiveStateException;
@@ -9,9 +12,9 @@ import tup.pps.exceptions.EntryNotFoundException;
 import tup.pps.exceptions.ResourceAlreadyExistsException;
 import tup.pps.models.Categoria;
 import tup.pps.repositories.CategoriaRepository;
+import tup.pps.repositories.specs.CategoriaSpecification;
 import tup.pps.services.CategoriaService;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,12 +26,21 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private CategoriaSpecification specification;
 
     @Override
-    public List<Categoria> findAll() {
-        return repository.findAll().stream()
-                .map(entity -> modelMapper.map(entity, Categoria.class))
-                .toList();
+    public Page<Categoria> findAll(
+            Pageable pageable,
+            String nombre,
+            Boolean activo
+    ) {
+        Specification<CategoriaEntity> spec = specification.byNombre(nombre)
+                .and(specification.byActivo(activo));
+
+        Page<CategoriaEntity> entityPage = repository.findAll(spec, pageable);
+
+        return entityPage.map(entity -> modelMapper.map(entity, Categoria.class));
     }
 
     @Override
