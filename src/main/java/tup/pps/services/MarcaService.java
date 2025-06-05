@@ -1,13 +1,13 @@
 package tup.pps.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tup.pps.models.Marca;
 
-import java.util.List;
-
 @Service
 public interface MarcaService {
-    List<Marca> findAll();
+    Page<Marca> findAll(Pageable pageable, String nombre, Boolean activo);
     Marca findById(Long id);
     Marca save(Marca marca);
     void delete(String nombre);
