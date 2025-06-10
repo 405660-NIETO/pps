@@ -1,4 +1,4 @@
-# Patrones de Tablas Soporte - E-commerce Música
+# Patrones de Tablas Soporte
 
 ## Definición
 Las **Tablas Soporte** son entidades de catálogo/referencia que sustentan la funcionalidad principal del sistema. Se clasifican en dos patrones según su volumen de datos y necesidades de actualización.

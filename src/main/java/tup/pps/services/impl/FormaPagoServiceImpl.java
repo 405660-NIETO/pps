@@ -16,6 +16,10 @@ import tup.pps.services.FormaPagoService;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Tabla Soporte - Patrón B
+ * Bajo volumen, sin paginado, con update
+ */
 @Service
 public class FormaPagoServiceImpl implements FormaPagoService {
 

@@ -17,6 +17,10 @@ import tup.pps.services.TrabajoService;
 
 import java.util.Optional;
 
+/**
+ * Tabla Soporte - Patrón A
+ * Alto volumen, con paginado, sin update
+ */
 @Service
 public class TrabajoServiceImpl implements TrabajoService {
 

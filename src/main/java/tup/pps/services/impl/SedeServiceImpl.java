@@ -16,6 +16,11 @@ import tup.pps.services.SedeService;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Tabla Soporte - Patrón B (Variante)
+ * Bajo volumen, sin paginado, con update
+ * ESPECIAL: direccion es unique, no nombre
+ */
 @Service
 public class SedeServiceImpl implements SedeService {
 
