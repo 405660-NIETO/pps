@@ -32,7 +32,7 @@ public class RolController {
     }
 
     @PostMapping
-    public ResponseEntity<Rol> createRol(@RequestBody Rol rol) {
+    public ResponseEntity<Rol> createRol(@RequestBody String rol) {
         return new ResponseEntity<>(rolService.save(rol), HttpStatus.CREATED);
     }
 

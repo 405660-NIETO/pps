@@ -40,7 +40,7 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public ResponseEntity<Categoria> createCategoria(@RequestBody Categoria categoria) {
+    public ResponseEntity<Categoria> createCategoria(@RequestBody String categoria) {
         return new ResponseEntity<>(categoriaService.save(categoria), HttpStatus.CREATED);
     }
 

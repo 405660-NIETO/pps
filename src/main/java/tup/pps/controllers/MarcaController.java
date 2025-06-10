@@ -40,7 +40,7 @@ public class MarcaController {
     }
 
     @PostMapping
-    public ResponseEntity<Marca> createMarca(@RequestBody Marca marca) {
+    public ResponseEntity<Marca> createMarca(@RequestBody String marca) {
         return new ResponseEntity<>(marcaService.save(marca), HttpStatus.CREATED);
     }
 

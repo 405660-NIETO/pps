@@ -55,8 +55,8 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public Categoria save(Categoria categoria) {
-        Optional<CategoriaEntity> categoriaOpcional = repository.findByNombre(categoria.getNombre());
+    public Categoria save(String categoria) {
+        Optional<CategoriaEntity> categoriaOpcional = repository.findByNombre(categoria);
         if(categoriaOpcional.isPresent()) {
             if(categoriaOpcional.get().getActivo()) {
                 throw new ResourceAlreadyExistsException("Ya hay una categoria con ese nombre");
@@ -69,7 +69,7 @@ public class CategoriaServiceImpl implements CategoriaService {
         }
 
         CategoriaEntity entity = new CategoriaEntity();
-        entity.setNombre(categoria.getNombre());
+        entity.setNombre(categoria);
         entity.setActivo(true);
         entity = repository.save(entity);
         return modelMapper.map(entity, Categoria.class);
@@ -88,4 +88,7 @@ public class CategoriaServiceImpl implements CategoriaService {
         repository.save(entity);
     }
 
+    public Optional<CategoriaEntity> findByNombre(String nombre) {
+        return repository.findByNombre(nombre);
+    }
 }

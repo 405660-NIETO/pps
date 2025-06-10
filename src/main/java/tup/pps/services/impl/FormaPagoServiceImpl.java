@@ -76,8 +76,8 @@ public class FormaPagoServiceImpl implements FormaPagoService {
     }
 
     @Override
-    public FormaPago save(FormaPago formaPago) {
-        Optional<FormaPagoEntity> formaPagoOpcional = repository.findByNombre(formaPago.getNombre());
+    public FormaPago save(String formaPago) {
+        Optional<FormaPagoEntity> formaPagoOpcional = repository.findByNombre(formaPago);
         if(formaPagoOpcional.isPresent()) {
             if(formaPagoOpcional.get().getActivo()) {
                 throw new ResourceAlreadyExistsException("Ya hay una forma de pago con ese nombre");
@@ -90,7 +90,7 @@ public class FormaPagoServiceImpl implements FormaPagoService {
         }
 
         FormaPagoEntity entity = new FormaPagoEntity();
-        entity.setNombre(formaPago.getNombre());
+        entity.setNombre(formaPago);
         entity.setActivo(true);
         entity = repository.save(entity);
         return modelMapper.map(entity, FormaPago.class);
@@ -107,5 +107,9 @@ public class FormaPagoServiceImpl implements FormaPagoService {
 
         entity.setActivo(false);
         repository.save(entity);
+    }
+
+    public Optional<FormaPagoEntity> findByNombre(String nombre) {
+        return repository.findByNombre(nombre);
     }
 }

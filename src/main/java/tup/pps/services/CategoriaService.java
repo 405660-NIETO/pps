@@ -3,9 +3,10 @@ package tup.pps.services;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import tup.pps.entities.CategoriaEntity;
 import tup.pps.models.Categoria;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface CategoriaService {
@@ -15,6 +16,7 @@ public interface CategoriaService {
             Boolean activo
     );
     Categoria findById(Long id);
-    Categoria save(Categoria categoria);
+    Categoria save(String categoria);
     void delete(String nombre);
+    Optional<CategoriaEntity> findByNombre(String nombre);
 }

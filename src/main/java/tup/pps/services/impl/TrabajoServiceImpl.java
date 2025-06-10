@@ -55,8 +55,8 @@ public class TrabajoServiceImpl implements TrabajoService {
     }
 
     @Override
-    public Trabajo save(Trabajo trabajo) {
-        Optional<TrabajoEntity> trabajoOpcional = repository.findByNombre(trabajo.getNombre());
+    public Trabajo save(String trabajo) {
+        Optional<TrabajoEntity> trabajoOpcional = repository.findByNombre(trabajo);
         if(trabajoOpcional.isPresent()) {
             if(trabajoOpcional.get().getActivo()) {
                 throw new ResourceAlreadyExistsException("Ya hay un trabajo con ese nombre");
@@ -69,7 +69,7 @@ public class TrabajoServiceImpl implements TrabajoService {
         }
 
         TrabajoEntity entity = new TrabajoEntity();
-        entity.setNombre(trabajo.getNombre());
+        entity.setNombre(trabajo);
         entity.setActivo(true);
         entity = repository.save(entity);
         return modelMapper.map(entity, Trabajo.class);
@@ -86,5 +86,9 @@ public class TrabajoServiceImpl implements TrabajoService {
 
         entity.setActivo(false);
         repository.save(entity);
+    }
+
+    public Optional<TrabajoEntity> findByNombre(String nombre) {
+        return repository.findByNombre(nombre);
     }
 }

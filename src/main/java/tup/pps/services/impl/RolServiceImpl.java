@@ -76,8 +76,8 @@ public class RolServiceImpl implements RolService {
     }
 
     @Override
-    public Rol save(Rol rol) {
-        Optional<RolEntity> rolOpcional = repository.findByNombre(rol.getNombre());
+    public Rol save(String rol) {
+        Optional<RolEntity> rolOpcional = repository.findByNombre(rol);
         if(rolOpcional.isPresent()) {
             if(rolOpcional.get().getActivo()) {
                 throw new ResourceAlreadyExistsException("Ya hay un rol con ese nombre");
@@ -90,7 +90,7 @@ public class RolServiceImpl implements RolService {
         }
 
         RolEntity entity = new RolEntity();
-        entity.setNombre(rol.getNombre());
+        entity.setNombre(rol);
         entity.setActivo(true);
         entity = repository.save(entity);
         return modelMapper.map(entity, Rol.class);
@@ -107,5 +107,9 @@ public class RolServiceImpl implements RolService {
 
         entity.setActivo(false);
         repository.save(entity);
+    }
+
+    public Optional<RolEntity> findByNombre(String nombre) {
+        return repository.findByNombre(nombre);
     }
 }

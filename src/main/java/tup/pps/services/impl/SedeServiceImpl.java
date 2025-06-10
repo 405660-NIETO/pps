@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import tup.pps.dtos.SedeDTO;
 import tup.pps.entities.SedeEntity;
 import tup.pps.exceptions.ConflictiveStateException;
 import tup.pps.exceptions.EntryNotFoundException;
@@ -54,29 +55,29 @@ public class SedeServiceImpl implements SedeService {
     }
 
     @Override
-    public Sede update(String direccionActual, String nombreNuevo, String direccionNueva) {
+    public Sede update(String direccionActual, SedeDTO sedeDTO) {
         // 1. Verificar que existe la sede a actualizar
         SedeEntity entity = repository.findByDireccion(direccionActual)
                 .orElseThrow(() -> new EntryNotFoundException("No se encontro una sede con esa direccion"));
 
         // 2. Verificar que la nueva direccion no exista ya (si es diferente)
-        if (!direccionActual.equals(direccionNueva)) {
-            Optional<SedeEntity> existeNuevaDireccion = repository.findByDireccion(direccionNueva);
+        if (!direccionActual.equals(sedeDTO.getDireccion())) {
+            Optional<SedeEntity> existeNuevaDireccion = repository.findByDireccion(sedeDTO.getDireccion());
             if (existeNuevaDireccion.isPresent()) {
                 throw new ResourceAlreadyExistsException("Ya existe una sede con esa direccion");
             }
         }
 
         // 3. Actualizar ambos campos
-        entity.setNombre(nombreNuevo);
-        entity.setDireccion(direccionNueva);
+        entity.setNombre(sedeDTO.getNombre());
+        entity.setDireccion(sedeDTO.getDireccion());
         entity = repository.save(entity);
 
         return modelMapper.map(entity, Sede.class);
     }
 
     @Override
-    public Sede save(Sede sede) {
+    public Sede save(SedeDTO sede) {
         Optional<SedeEntity> sedeOpcional = repository.findByDireccion(sede.getDireccion());
         if(sedeOpcional.isPresent()) {
             if(sedeOpcional.get().getActivo()) {
@@ -110,5 +111,9 @@ public class SedeServiceImpl implements SedeService {
 
         entity.setActivo(false);
         repository.save(entity);
+    }
+
+    public Optional<SedeEntity> findByDireccion(String direccion) {
+        return repository.findByDireccion(direccion);
     }
 }

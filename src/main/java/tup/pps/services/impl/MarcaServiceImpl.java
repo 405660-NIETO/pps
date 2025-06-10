@@ -55,8 +55,8 @@ public class MarcaServiceImpl implements MarcaService {
     }
 
     @Override
-    public Marca save(Marca marca) {
-        Optional<MarcaEntity> marcaOpcional = repository.findByNombre(marca.getNombre());
+    public Marca save(String marca) {
+        Optional<MarcaEntity> marcaOpcional = repository.findByNombre(marca);
         if(marcaOpcional.isPresent()) {
             if(marcaOpcional.get().getActivo()) {
                 throw new ResourceAlreadyExistsException("Ya hay una marca con ese nombre");
@@ -69,7 +69,7 @@ public class MarcaServiceImpl implements MarcaService {
         }
 
         MarcaEntity entity = new MarcaEntity();
-        entity.setNombre(marca.getNombre());
+        entity.setNombre(marca);
         entity.setActivo(true);
         entity = repository.save(entity);
         return modelMapper.map(entity, Marca.class);
@@ -86,5 +86,9 @@ public class MarcaServiceImpl implements MarcaService {
 
         entity.setActivo(false);
         repository.save(entity);
+    }
+
+    public Optional<MarcaEntity> findByNombre(String nombre) {
+        return repository.findByNombre(nombre);
     }
 }

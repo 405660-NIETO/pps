@@ -40,7 +40,7 @@ public class TrabajoController {
     }
 
     @PostMapping
-    public ResponseEntity<Trabajo> createTrabajo(@RequestBody Trabajo trabajo) {
+    public ResponseEntity<Trabajo> createTrabajo(@RequestBody String trabajo) {
         return new ResponseEntity<>(trabajoService.save(trabajo), HttpStatus.CREATED);
     }
 

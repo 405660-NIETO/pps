@@ -32,7 +32,7 @@ public class FormaPagoController {
     }
 
     @PostMapping
-    public ResponseEntity<FormaPago> createFormaPago(@RequestBody FormaPago formaPago) {
+    public ResponseEntity<FormaPago> createFormaPago(@RequestBody String formaPago) {
         return new ResponseEntity<>(formaPagoService.save(formaPago), HttpStatus.CREATED);
     }
 

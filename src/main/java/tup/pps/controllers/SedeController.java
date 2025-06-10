@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tup.pps.dtos.SedeDTO;
+import tup.pps.dtos.SedeUpdateDTO;
 import tup.pps.models.Sede;
 import tup.pps.services.SedeService;
 
@@ -33,17 +35,16 @@ public class SedeController {
     }
 
     @PostMapping
-    public ResponseEntity<Sede> createSede(@RequestBody Sede sede) {
+    public ResponseEntity<Sede> createSede(@RequestBody SedeDTO sede) {
         return new ResponseEntity<>(sedeService.save(sede), HttpStatus.CREATED);
     }
 
     @PutMapping
     public ResponseEntity<Sede> updateSede(
-            @RequestParam String direccionActual,
-            @RequestParam String nombreNuevo,
-            @RequestParam String direccionNueva
+            @RequestBody SedeUpdateDTO sedeUpdateDTO
     ) {
-        return ResponseEntity.ok(sedeService.update(direccionActual, nombreNuevo, direccionNueva));
+        SedeDTO dto = new SedeDTO(sedeUpdateDTO.getNombre(), sedeUpdateDTO.getDireccion());
+        return ResponseEntity.ok(sedeService.update(sedeUpdateDTO.getDireccionActual(), dto));
     }
 
     @DeleteMapping("/{direccion}")
