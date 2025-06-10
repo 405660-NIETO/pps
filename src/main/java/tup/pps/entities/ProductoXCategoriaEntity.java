@@ -23,4 +23,7 @@ public class ProductoXCategoriaEntity {
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
     private CategoriaEntity categoria;
+
+    @Column(nullable = false)
+    private Boolean activo;
 }
