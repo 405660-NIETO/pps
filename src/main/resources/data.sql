@@ -83,3 +83,31 @@ VALUES ('juan.luthier@musica.com', 'temp123', 'Juan', 'Pérez', 4, NOW(), true);
 
 INSERT INTO Usuarios (email, password, nombre, apellido, rol_id, fecha_creacion, activo)
 VALUES ('maria.luthier@musica.com', 'temp123', 'María', 'García', 4, NOW(), true);
+
+-- Usuarios adicionales para testing de búsqueda
+INSERT INTO Usuarios (email, password, nombre, apellido, rol_id, fecha_creacion, activo)
+VALUES ('justin.luthier@musica.com', 'temp123', 'Justin', 'Martínez', 4, NOW(), true);
+
+INSERT INTO Usuarios (email, password, nombre, apellido, rol_id, fecha_creacion, activo)
+VALUES ('marta.luthier@musica.com', 'temp123', 'Marta', 'González', 4, NOW(), true);
+
+-- Reparación de prueba para update
+INSERT INTO Reparaciones (usuario_id, detalles, fecha_inicio, fecha_entrega, precio, activo, factura_id)
+VALUES (1, 'Guitarra clásica - mantenimiento básico', '2025-06-10 09:00:00', '2025-11-10 17:00:00', 120.00, true, null);
+
+-- Reparación de Justin
+INSERT INTO Reparaciones (usuario_id, detalles, fecha_inicio, fecha_entrega, precio, activo, factura_id)
+VALUES (3, 'Guitarra acústica - cambio de clavijas', '2025-06-10 08:00:00', '2025-06-10 16:00:00', 80.00, true, null);
+
+-- Reparación de Marta
+INSERT INTO Reparaciones (usuario_id, detalles, fecha_inicio, fecha_entrega, precio, activo, factura_id)
+VALUES (4, 'Bajo eléctrico - ajuste de pastillas', '2025-06-11 09:00:00', '2025-06-12 14:00:00', 95.50, true, null);
+
+
+-- Relaciones iniciales de la reparación (ID 1 suponiendo que es la primera reparación)
+INSERT INTO Reparaciones_X_Trabajos (reparacion_id, trabajo_id, activo) VALUES (1, 1, true);  -- Cambio de Cuerdas
+INSERT INTO Reparaciones_X_Trabajos (reparacion_id, trabajo_id, activo) VALUES (1, 2, true);  -- Calibracion
+-- Relaciones para las reparaciones
+INSERT INTO Reparaciones_X_Trabajos (reparacion_id, trabajo_id, activo) VALUES (2, 4, true);  -- Justin: Cambio de Pastillas
+INSERT INTO Reparaciones_X_Trabajos (reparacion_id, trabajo_id, activo) VALUES (3, 2, true);  -- Marta: Calibracion
+INSERT INTO Reparaciones_X_Trabajos (reparacion_id, trabajo_id, activo) VALUES (3, 4, true);  -- Marta: Cambio de Pastillas
