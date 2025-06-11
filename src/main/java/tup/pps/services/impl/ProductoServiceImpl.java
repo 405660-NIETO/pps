@@ -2,17 +2,22 @@ package tup.pps.services.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import tup.pps.dtos.ProductoDTO;
 import tup.pps.entities.CategoriaEntity;
 import tup.pps.entities.MarcaEntity;
 import tup.pps.entities.ProductoEntity;
 import tup.pps.entities.ProductoXCategoriaEntity;
+import tup.pps.exceptions.EntryNotFoundException;
 import tup.pps.models.Categoria;
 import tup.pps.models.Marca;
 import tup.pps.models.Producto;
 import tup.pps.repositories.ProductoRepository;
 import tup.pps.repositories.ProductoXCategoriaRepository;
+import tup.pps.repositories.specs.ProductoSpecification;
 import tup.pps.services.CategoriaService;
 import tup.pps.services.MarcaService;
 import tup.pps.services.ProductoService;
@@ -31,6 +36,9 @@ public class ProductoServiceImpl implements ProductoService {
     private ProductoXCategoriaRepository productoXCategoriaRepository;
 
     @Autowired
+    private ProductoSpecification specification;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     // Servicios de tablas soporte
@@ -39,6 +47,113 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Autowired
     private CategoriaService categoriaService;
+
+    @Override
+    public Page<Producto> findAll(
+            Pageable pageable,
+            String nombre,
+            String nombreMarca,
+            List<String> categorias,
+            Double precioMin,
+            Double precioMax,
+            Integer stockMin,
+            Integer stockMax,
+            Boolean activo
+    ) {
+        // Combinar todas las specifications
+        Specification<ProductoEntity> spec = specification.byNombre(nombre)
+                .and(specification.byMarca(nombreMarca))
+                .and(specification.byCategorias(categorias))
+                .and(specification.byPrecioRango(precioMin, precioMax))
+                .and(specification.byStockRango(stockMin, stockMax))
+                .and(specification.byActivo(activo));
+
+        Page<ProductoEntity> entityPage = repository.findAll(spec, pageable);
+
+        // Mapear usando devolverModelo para cada producto
+        return entityPage.map(this::devolverModelo);
+    }
+
+    public Producto update(Long id, ProductoDTO productoDTO) {
+        // 1. Buscar producto existente
+        ProductoEntity productoExistente = repository.findById(id)
+                .orElseThrow(() -> new EntryNotFoundException("Producto no encontrado"));
+
+        // 2. Resolver marca (igual = mantener, diferente = resolver)
+        MarcaEntity marca = resolverMarca(productoDTO.getMarca());
+
+        // 3. Resolver categorías nuevas
+        List<CategoriaEntity> categoriasNuevas = resolverCategorias(productoDTO.getCategorias());
+
+        // 4. Actualizar campos del producto
+        actualizarCamposProducto(productoExistente, productoDTO, marca);
+
+        // 5. Gestionar relaciones categorías (desactivar viejas, activar/crear nuevas)
+        gestionarRelacionesCategorias(productoExistente, categoriasNuevas);
+
+        // 6. Retornar modelo actualizado
+        return devolverModelo(productoExistente);
+    }
+
+    private void actualizarCamposProducto(ProductoEntity productoExistente, ProductoDTO productoDTO, MarcaEntity marca) {
+        // Actualizar campos básicos
+        productoExistente.setNombre(productoDTO.getNombre());
+        productoExistente.setComentarios(productoDTO.getComentarios());
+        productoExistente.setFotoUrl(productoDTO.getFotoUrl());
+        productoExistente.setStock(productoDTO.getStock());
+        productoExistente.setPrecio(productoDTO.getPrecio());
+
+        // Actualizar marca (puede ser la misma o nueva)
+        productoExistente.setMarca(marca);
+
+        // El activo NO se toca - eso es responsabilidad de delete()
+
+        // Guardar los cambios
+        repository.save(productoExistente);
+    }
+
+    private void gestionarRelacionesCategorias(ProductoEntity producto, List<CategoriaEntity> categoriasNuevas) {
+
+        // 1. Obtenemos todas las relaciones que tiene ese producto con categorias
+        List<ProductoXCategoriaEntity> relacionesActuales =
+                productoXCategoriaRepository.findByProducto(producto);
+
+        // 2. En base a todas las relaciones, comparamos cuales de la lista de categorias de
+        // la actualizacion estan ahi, y si alguna de esas esta en false, la "apagamos"
+        for (ProductoXCategoriaEntity relacion : relacionesActuales) {
+            boolean categoriaEnDTO = categoriasNuevas.stream()
+                    .anyMatch(cat -> cat.getId().equals(relacion.getCategoria().getId()));
+
+            if (!categoriaEnDTO && relacion.getActivo()) {
+                relacion.setActivo(false);
+                productoXCategoriaRepository.save(relacion);
+            }
+        }
+
+        // 3. Luego faltaria agregar las que no estan en las previas, pero salian como "apagadas",
+        // simplemente les pones true, y para las caracteristicas que nunca se
+        // relacionaron con el producto creamos la relacion.
+        for (CategoriaEntity categoriaNueva : categoriasNuevas) {
+            Optional<ProductoXCategoriaEntity> relacionExistente = relacionesActuales.stream()
+                    .filter(rel -> rel.getCategoria().getId().equals(categoriaNueva.getId()))
+                    .findFirst();
+
+            if (relacionExistente.isPresent()) {
+                // Existe pero esta activo = false, (REACTIVACION)
+                if (!relacionExistente.get().getActivo()) {
+                    relacionExistente.get().setActivo(true);
+                    productoXCategoriaRepository.save(relacionExistente.get());
+                }
+            } else {
+                // No existe relacion, asi que se crea una
+                ProductoXCategoriaEntity nuevaRelacion = new ProductoXCategoriaEntity();
+                nuevaRelacion.setProducto(producto);
+                nuevaRelacion.setCategoria(categoriaNueva);
+                nuevaRelacion.setActivo(true);
+                productoXCategoriaRepository.save(nuevaRelacion);
+            }
+        }
+    }
 
     @Override
     public Producto save(ProductoDTO productoDTO) {
