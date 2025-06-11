@@ -25,4 +25,5 @@ public interface ProductoService {
             Boolean activo
     );
     Producto findById(Long id);
+    void delete(Long id);
 }

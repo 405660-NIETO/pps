@@ -11,6 +11,7 @@ import tup.pps.entities.CategoriaEntity;
 import tup.pps.entities.MarcaEntity;
 import tup.pps.entities.ProductoEntity;
 import tup.pps.entities.ProductoXCategoriaEntity;
+import tup.pps.exceptions.ConflictiveStateException;
 import tup.pps.exceptions.EntryNotFoundException;
 import tup.pps.models.Categoria;
 import tup.pps.models.Marca;
@@ -47,6 +48,19 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Autowired
     private CategoriaService categoriaService;
+
+    @Override
+    public void delete(Long id) {
+        ProductoEntity producto = repository.findById(id)
+                .orElseThrow(() -> new EntryNotFoundException("No se encontro ningun producto con ese ID"));
+
+        if (!producto.getActivo()) {
+            throw new ConflictiveStateException("El producto ya esta desactivado");
+        }
+
+        producto.setActivo(false);
+        repository.save(producto);
+    }
 
     @Override
     public Producto findById(Long id) {
