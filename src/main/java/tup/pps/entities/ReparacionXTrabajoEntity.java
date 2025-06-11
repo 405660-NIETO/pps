@@ -23,4 +23,7 @@ public class ReparacionXTrabajoEntity {
     @ManyToOne
     @JoinColumn(name = "trabajo_id", nullable = false)
     private TrabajoEntity trabajo;
+
+    @Column(nullable = false)
+    private Boolean activo;
 }

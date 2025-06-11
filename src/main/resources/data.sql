@@ -76,3 +76,10 @@ INSERT INTO Productos_X_Categorias (producto_id, categoria_id, activo) VALUES (5
 -- Guitarra Fender (ID 6): Guitarras + Eléctricas
 INSERT INTO Productos_X_Categorias (producto_id, categoria_id, activo) VALUES (6, 1, true);  -- Guitarras
 INSERT INTO Productos_X_Categorias (producto_id, categoria_id, activo) VALUES (6, 5, true);  -- Eléctricas
+
+-- Usuarios luthiers para testing
+INSERT INTO Usuarios (email, password, nombre, apellido, rol_id, fecha_creacion, activo)
+VALUES ('juan.luthier@musica.com', 'temp123', 'Juan', 'Pérez', 4, NOW(), true);
+
+INSERT INTO Usuarios (email, password, nombre, apellido, rol_id, fecha_creacion, activo)
+VALUES ('maria.luthier@musica.com', 'temp123', 'María', 'García', 4, NOW(), true);
