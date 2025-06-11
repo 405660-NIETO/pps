@@ -24,9 +24,5 @@ public interface ProductoService {
             Integer stockMax,
             Boolean activo
     );
-    // TODO: Agregar después
-    // Page<Producto> findAll(Pageable pageable, filtros...);
-    // Producto findById(Long id);
-    // Producto update(Long id, ProductoDTO productoDTO);
-    // void delete(Long id);
+    Producto findById(Long id);
 }

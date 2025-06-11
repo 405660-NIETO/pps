@@ -49,6 +49,14 @@ public class ProductoServiceImpl implements ProductoService {
     private CategoriaService categoriaService;
 
     @Override
+    public Producto findById(Long id) {
+        ProductoEntity producto = repository.findById(id)
+                .orElseThrow(() -> new EntryNotFoundException("No se encontro ningun producto con ese ID"));
+
+        return devolverModelo(producto);
+    }
+
+    @Override
     public Page<Producto> findAll(
             Pageable pageable,
             String nombre,

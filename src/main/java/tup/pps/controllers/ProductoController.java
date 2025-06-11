@@ -61,9 +61,9 @@ public class ProductoController {
                 activo
         ), HttpStatus.OK);
     }
-    // TODO: Agregar después los demás endpoints
-    // GET /productos/page - findAll con paginado y filtros
-    // GET /productos/{id} - findById
-    // PUT /productos/{id} - update
-    // DELETE /productos/{id} - delete
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Producto> getProductoById(@PathVariable Long id) {
+        return ResponseEntity.ok(productoService.findById(id));
+    }
 }
