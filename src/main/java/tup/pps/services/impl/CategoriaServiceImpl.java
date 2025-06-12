@@ -88,6 +88,7 @@ public class CategoriaServiceImpl implements CategoriaService {
         repository.save(entity);
     }
 
+    @Override
     public Optional<CategoriaEntity> findByNombre(String nombre) {
         return repository.findByNombre(nombre);
     }

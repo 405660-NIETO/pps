@@ -14,6 +14,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository repository;
 
+    @Override
     public Optional<UsuarioEntity> findEntityById(Long id) {
         return repository.findById(id);
     }

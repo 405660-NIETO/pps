@@ -109,7 +109,13 @@ public class FormaPagoServiceImpl implements FormaPagoService {
         repository.save(entity);
     }
 
+    @Override
     public Optional<FormaPagoEntity> findByNombre(String nombre) {
         return repository.findByNombre(nombre);
+    }
+
+    @Override
+    public Optional<FormaPagoEntity> findEntityById(Long id) {
+        return repository.findById(id);
     }
 }

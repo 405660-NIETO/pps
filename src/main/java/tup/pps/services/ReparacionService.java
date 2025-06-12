@@ -5,10 +5,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tup.pps.dtos.ReparacionDTO;
 import tup.pps.entities.FacturaEntity;
+import tup.pps.entities.ReparacionEntity;
 import tup.pps.models.Reparacion;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface ReparacionService {
@@ -27,4 +29,7 @@ public interface ReparacionService {
     );
     Reparacion findById(Long id);
     void delete(Long id);
+    Optional<ReparacionEntity> findEntityById(Long id);
+    void actualizarReparacion(ReparacionEntity reparacion);
+    List<Reparacion> findByFacturaId(Long facturaId);
 }

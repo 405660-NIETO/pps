@@ -16,4 +16,5 @@ public interface SedeService {
     Sede save(SedeDTO sede);
     void delete(String direccion);
     Optional<SedeEntity> findByDireccion(String direccion);
+    Optional<SedeEntity> findEntityById(Long id);
 }

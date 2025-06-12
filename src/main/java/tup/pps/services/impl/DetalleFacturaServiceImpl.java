@@ -14,6 +14,8 @@ import tup.pps.repositories.DetalleFacturaRepository;
 import tup.pps.services.DetalleFacturaService;
 import tup.pps.services.ProductoService;
 
+import java.util.List;
+
 @Service
 public class DetalleFacturaServiceImpl implements DetalleFacturaService {
 
@@ -79,5 +81,13 @@ public class DetalleFacturaServiceImpl implements DetalleFacturaService {
         productoService.actualizarStock(producto);
 
         return detalleGuardado;
+    }
+
+    @Override
+    public List<DetalleFactura> findByFacturaId(Long facturaId) {
+        return repository.findByFactura_Id(facturaId)
+                .stream()
+                .map(entity -> modelMapper.map(entity, DetalleFactura.class))
+                .toList();
     }
 }

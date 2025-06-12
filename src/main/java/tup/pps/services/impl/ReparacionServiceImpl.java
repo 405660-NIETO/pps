@@ -179,7 +179,7 @@ public class ReparacionServiceImpl implements ReparacionService {
     public Reparacion save(ReparacionDTO reparacionDTO) {
         return save(reparacionDTO, null); // Guardar para el endpoint de reparacion
     }
-    
+
     @Override
     public Reparacion save(ReparacionDTO reparacionDTO, FacturaEntity factura) {
         // 1. Resolver USUARIO
@@ -270,5 +270,23 @@ public class ReparacionServiceImpl implements ReparacionService {
 
         modelo.setTrabajos(trabajos);
         return modelo;
+    }
+
+    @Override
+    public Optional<ReparacionEntity> findEntityById(Long id) {
+        return repository.findById(id);
+    }
+
+    @Override
+    public void actualizarReparacion(ReparacionEntity reparacion) {
+        repository.save(reparacion);
+    }
+
+    @Override
+    public List<Reparacion> findByFacturaId(Long facturaId) {
+        return repository.findByFactura_Id(facturaId)
+                .stream()
+                .map(this::devolverModelo)  // ← Reutiliza el método existente
+                .toList();
     }
 }

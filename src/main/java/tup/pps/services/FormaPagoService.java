@@ -15,4 +15,5 @@ public interface FormaPagoService {
     FormaPago save(String formaPago);
     void delete(String nombre);
     Optional<FormaPagoEntity> findByNombre(String nombre);
+    Optional<FormaPagoEntity> findEntityById(Long id);
 }

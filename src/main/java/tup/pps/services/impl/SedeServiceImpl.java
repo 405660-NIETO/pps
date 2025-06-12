@@ -113,7 +113,13 @@ public class SedeServiceImpl implements SedeService {
         repository.save(entity);
     }
 
+    @Override
     public Optional<SedeEntity> findByDireccion(String direccion) {
         return repository.findByDireccion(direccion);
+    }
+
+    @Override
+    public Optional<SedeEntity> findEntityById(Long id) {
+        return repository.findById(id);
     }
 }

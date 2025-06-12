@@ -20,6 +20,7 @@ INSERT INTO Forma_Pago (nombre, activo) VALUES ('Credito', true);
 INSERT INTO Forma_Pago (nombre, activo) VALUES ('Prepago', true);
 INSERT INTO Forma_Pago (nombre, activo) VALUES ('MODO', true);
 INSERT INTO Forma_Pago (nombre, activo) VALUES ('Transferencia', true);
+INSERT INTO Forma_Pago (nombre, activo) VALUES ('Mercado Pago', true);
 
 INSERT INTO Sedes (nombre, direccion, activo) VALUES ('Tienda de Musica', 'Calle 1', true);
 INSERT INTO Sedes (nombre, direccion, activo) VALUES ('Tienda de Musica', 'Calle 2', false);

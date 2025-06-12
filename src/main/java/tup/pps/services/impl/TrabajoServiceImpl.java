@@ -88,6 +88,7 @@ public class TrabajoServiceImpl implements TrabajoService {
         repository.save(entity);
     }
 
+    @Override
     public Optional<TrabajoEntity> findByNombre(String nombre) {
         return repository.findByNombre(nombre);
     }

@@ -88,6 +88,7 @@ public class MarcaServiceImpl implements MarcaService {
         repository.save(entity);
     }
 
+    @Override
     public Optional<MarcaEntity> findByNombre(String nombre) {
         return repository.findByNombre(nombre);
     }

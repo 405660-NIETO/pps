@@ -109,6 +109,7 @@ public class RolServiceImpl implements RolService {
         repository.save(entity);
     }
 
+    @Override
     public Optional<RolEntity> findByNombre(String nombre) {
         return repository.findByNombre(nombre);
     }
