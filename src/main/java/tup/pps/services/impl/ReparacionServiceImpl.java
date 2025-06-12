@@ -50,6 +50,27 @@ public class ReparacionServiceImpl implements ReparacionService {
     private TrabajoService trabajoService;
 
     @Override
+    public void delete(Long id) {
+        ReparacionEntity reparacion = repository.findById(id)
+                .orElseThrow(() -> new EntryNotFoundException("No se encontro una reparacion con ese ID"));
+
+        if (!reparacion.getActivo()) {
+            throw new ConflictiveStateException("La reparacion ya esta desactivada");
+        }
+
+        reparacion.setActivo(false);
+        repository.save(reparacion);
+    }
+
+    @Override
+    public Reparacion findById(Long id) {
+        ReparacionEntity reparacion = repository.findById(id)
+                .orElseThrow(() -> new EntryNotFoundException("No se encontro ninguna reparacion con ese ID"));
+
+        return devolverModelo(reparacion);
+    }
+
+    @Override
     public Page<Reparacion> findAll(
             Pageable pageable,
             String usuario,

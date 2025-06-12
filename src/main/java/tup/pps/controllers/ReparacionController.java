@@ -61,4 +61,14 @@ public class ReparacionController {
         ), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Reparacion> getReparacionById(@PathVariable Long id) {
+        return ResponseEntity.ok(reparacionService.findById(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReparacion(@PathVariable Long id) {
+        reparacionService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

@@ -23,4 +23,6 @@ public interface ReparacionService {
             Double precioMax,
             Boolean activo
     );
+    Reparacion findById(Long id);
+    void delete(Long id);
 }
