@@ -8,4 +8,5 @@ import tup.pps.models.DetalleFactura;
 @Service
 public interface DetalleFacturaService {
     DetalleFactura save(DetalleFacturaDTO dto, FacturaEntity factura);
+    DetalleFactura findById(Long id);
 }

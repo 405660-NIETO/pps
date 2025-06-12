@@ -29,4 +29,5 @@ public interface ProductoService {
     Producto findById(Long id);
     void delete(Long id);
     Optional<ProductoEntity> findEntityById(Long id);
+    void actualizarStock(ProductoEntity producto);
 }

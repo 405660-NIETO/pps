@@ -7,6 +7,7 @@ import tup.pps.dtos.DetalleFacturaDTO;
 import tup.pps.entities.DetalleFacturaEntity;
 import tup.pps.entities.FacturaEntity;
 import tup.pps.entities.ProductoEntity;
+import tup.pps.exceptions.ConflictiveStateException;
 import tup.pps.exceptions.EntryNotFoundException;
 import tup.pps.models.DetalleFactura;
 import tup.pps.repositories.DetalleFacturaRepository;
@@ -47,6 +48,12 @@ public class DetalleFacturaServiceImpl implements DetalleFacturaService {
 
     // 3. Crear Detalle - Construcción paso a paso
     private DetalleFacturaEntity crearDetalle(DetalleFacturaDTO dto, ProductoEntity producto, FacturaEntity factura) {
+        // Validar stock disponible
+        if (dto.getCantidad() > producto.getStock()) {
+            throw new ConflictiveStateException("Stock insuficiente. Disponible: "
+                    + producto.getStock() + ", solicitado: " + dto.getCantidad());
+        }
+
         DetalleFacturaEntity detalle = new DetalleFacturaEntity();
         detalle.setFactura(factura);
         detalle.setProducto(producto);
@@ -56,6 +63,13 @@ public class DetalleFacturaServiceImpl implements DetalleFacturaService {
         Double precio = dto.getPrecio() != null ? dto.getPrecio() : producto.getPrecio();
         detalle.setPrecio(precio);
 
-        return repository.save(detalle);
+        // Guardar detalle
+        DetalleFacturaEntity detalleGuardado = repository.save(detalle);
+
+        // Actualizar stock del producto
+        producto.setStock(producto.getStock() - dto.getCantidad());
+        productoService.actualizarStock(producto);
+
+        return detalleGuardado;
     }
 }

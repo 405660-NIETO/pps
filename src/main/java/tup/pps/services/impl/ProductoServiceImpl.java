@@ -283,4 +283,9 @@ public class ProductoServiceImpl implements ProductoService {
     public Optional<ProductoEntity> findEntityById(Long id) {
         return repository.findById(id);
     }
+
+    @Override
+    public void actualizarStock(ProductoEntity producto) {
+        repository.save(producto);
+    }
 }
