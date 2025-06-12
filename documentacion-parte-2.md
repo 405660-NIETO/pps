@@ -76,7 +76,7 @@ public Specification<ProductoEntity> byCategorias(List<String> nombresCategorias
 }
 ```
 
-### Logros Técnicos
+### Resultados
 - ✅ **CRUD completo** funcional
 - ✅ **Filtros avanzados** con paginación
 - ✅ **Integridad referencial** mantenida
@@ -145,7 +145,7 @@ public class ProductoXCategoriaEntity {
     private CategoriaEntity categoria;
     
     @Column(nullable = false)
-    private Boolean activo;  // ¡CLAVE!
+    private Boolean activo;  // CLAVE
 }
 ```
 
@@ -196,7 +196,7 @@ return builder.equal(subquery, (long) nombresCategorias.size());
 
 ## Impacto en el Proyecto
 
-### Logros Arquitectónicos
+### Resultados Arquitectónicos
 - ✅ **75% del backend completado** con estas dos entidades
 - ✅ **Patrón escalable** probado y funcional
 - ✅ **Base sólida** para Facturación y DetalleFactura

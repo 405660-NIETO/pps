@@ -170,10 +170,10 @@ public ObjectMapper objectMapper() {
 
 ### **Resultado:**
 ```json
-// ❌ ANTES: Array confuso
+// ❌ ANTES:
 "fechaCreacion": [2025,6,12,0,59,10,175250000]
 
-// ✅ DESPUÉS: ISO Format limpio
+// ✅ DESPUÉS:
 "fechaCreacion": "2025-06-12T01:11:02.238247"
 ```
 
@@ -291,7 +291,7 @@ public Specification<ReparacionEntity> byTrabajos(List<String> nombresTrabajos) 
 
 ---
 
-## 🏆 **Logros Arquitectónicos**
+## 🏆 **Resultados Arquitectónicos**
 
 - ✅ **Patrón escalable** probado en múltiples entidades
 - ✅ **Performance optimizada** con Specifications avanzadas
