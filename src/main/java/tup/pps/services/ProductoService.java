@@ -4,9 +4,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tup.pps.dtos.ProductoDTO;
+import tup.pps.entities.ProductoEntity;
 import tup.pps.models.Producto;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface ProductoService {
@@ -26,4 +28,5 @@ public interface ProductoService {
     );
     Producto findById(Long id);
     void delete(Long id);
+    Optional<ProductoEntity> findEntityById(Long id);
 }

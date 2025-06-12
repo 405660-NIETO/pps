@@ -278,4 +278,9 @@ public class ProductoServiceImpl implements ProductoService {
         modelo.setCategorias(listaModels);
         return modelo;
     }
+
+    @Override
+    public Optional<ProductoEntity> findEntityById(Long id) {
+        return repository.findById(id);
+    }
 }
