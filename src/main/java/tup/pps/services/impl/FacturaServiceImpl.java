@@ -2,6 +2,9 @@ package tup.pps.services.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import tup.pps.dtos.DetalleFacturaDTO;
 import tup.pps.dtos.FacturaDTO;
@@ -10,6 +13,7 @@ import tup.pps.exceptions.ConflictiveStateException;
 import tup.pps.exceptions.EntryNotFoundException;
 import tup.pps.models.*;
 import tup.pps.repositories.FacturaRepository;
+import tup.pps.repositories.specs.FacturaSpecification;
 import tup.pps.services.*;
 
 import java.time.LocalDateTime;
@@ -21,6 +25,9 @@ public class FacturaServiceImpl implements FacturaService {
 
     @Autowired
     private FacturaRepository repository;
+
+    @Autowired
+    private FacturaSpecification specification;
 
     @Autowired
     private ReparacionService reparacionService;
@@ -42,6 +49,37 @@ public class FacturaServiceImpl implements FacturaService {
 
     public Optional<FacturaEntity> findEntityById(Long id) {
         return repository.findById(id);
+    }
+
+    @Override
+    public Page<Factura> findAll(
+            Pageable pageable,
+            LocalDateTime fechaDesde,
+            LocalDateTime fechaHasta,
+            Long usuarioId,
+            Long sedeId,
+            Long formaPagoId,
+            Double montoMin,
+            Double montoMax,
+            Boolean tieneReparaciones,
+            Boolean tieneProductos,
+            Integer cantidadItemsMin,
+            Boolean activo
+    ) {
+        Specification<FacturaEntity> spec = specification.byFechaRango(fechaDesde, fechaHasta)
+                .and(specification.byUsuario(usuarioId))
+                .and(specification.bySede(sedeId))
+                .and(specification.byFormaPago(formaPagoId))
+                .and(specification.byMontoRango(montoMin, montoMax))
+                .and(specification.byTieneReparaciones(tieneReparaciones))
+                .and(specification.byTieneProductos(tieneProductos))
+                .and(specification.byCantidadItemsMin(cantidadItemsMin))
+                .and(specification.byActivo(activo));
+
+        Page<FacturaEntity> entityPage = repository.findAll(spec, pageable);
+
+        // Mapear usando devolverModelo para cada factura
+        return entityPage.map(this::devolverModelo);
     }
 
     @Override

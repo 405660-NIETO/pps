@@ -44,4 +44,7 @@ public class FacturaEntity {
     private String clienteCelular;
 
     private String clienteEmail;
+
+    @Column(nullable = false)
+    private Boolean activo;
 }

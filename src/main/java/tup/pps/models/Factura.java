@@ -26,4 +26,6 @@ public class Factura {
     private String clienteTelefono;
     private String clienteCelular;
     private String clienteEmail;
+
+    private Boolean activo;
 }

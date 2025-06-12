@@ -92,6 +92,10 @@ VALUES ('justin.luthier@musica.com', 'temp123', 'Justin', 'Martínez', 4, NOW(),
 INSERT INTO Usuarios (email, password, nombre, apellido, rol_id, fecha_creacion, activo)
 VALUES ('marta.luthier@musica.com', 'temp123', 'Marta', 'González', 4, NOW(), true);
 
+INSERT INTO Usuarios (email, password, nombre, apellido, rol_id, fecha_creacion, activo)
+VALUES ('adminm@admin.com', 'admin', 'Agustin', 'Nieto', 1, NOW(), true);
+
+
 -- Reparación de prueba para update
 INSERT INTO Reparaciones (usuario_id, detalles, fecha_inicio, fecha_entrega, precio, activo, factura_id)
 VALUES (1, 'Guitarra clásica - mantenimiento básico', '2025-06-10 09:00:00', '2025-11-10 17:00:00', 120.00, true, null);
@@ -112,3 +116,46 @@ INSERT INTO Reparaciones_X_Trabajos (reparacion_id, trabajo_id, activo) VALUES (
 INSERT INTO Reparaciones_X_Trabajos (reparacion_id, trabajo_id, activo) VALUES (2, 4, true);  -- Justin: Cambio de Pastillas
 INSERT INTO Reparaciones_X_Trabajos (reparacion_id, trabajo_id, activo) VALUES (3, 2, true);  -- Marta: Calibracion
 INSERT INTO Reparaciones_X_Trabajos (reparacion_id, trabajo_id, activo) VALUES (3, 4, true);  -- Marta: Cambio de Pastillas
+
+
+
+
+-- FACTURA 1: Solo productos (venta mostrador) - Agustin
+INSERT INTO Facturas (fecha, usuario_id, forma_pago_id, sede_id, cliente_nombre, cliente_apellido, cliente_telefono, activo)
+VALUES ('2025-06-10 10:30:00', 5, 1, 1, 'Carlos', 'Rodriguez', '11-2345-6789', true);
+
+-- Detalles Factura 1: 2 guitarras + 1 teclado
+INSERT INTO Detalle_Factura (factura_id, producto_id, cantidad, precio)
+VALUES (1, 1, 2, 1500.0),  -- 2x Guitarra Les Paul
+       (1, 3, 1, 800.0);   -- 1x Teclado PSR-E373
+
+-- FACTURA 2: Solo reparaciones (retiro servicios) - Agustin
+INSERT INTO Facturas (fecha, usuario_id, forma_pago_id, sede_id, cliente_nombre, cliente_email, activo)
+VALUES ('2025-06-11 14:15:00', 5, 2, 1, 'María', 'maria@email.com', true);
+
+-- Reparaciones ya están asociadas a facturas en data.sql original
+
+-- FACTURA 3: Mixta (retiro + compra adicional) - Agustin
+INSERT INTO Facturas (fecha, usuario_id, forma_pago_id, sede_id, cliente_nombre, cliente_documento, activo)
+VALUES ('2025-06-11 16:45:00', 5, 3, 2, 'Roberto', '12345678', true);
+
+-- Detalles Factura 3: 1 guitarra + accesorios
+INSERT INTO Detalle_Factura (factura_id, producto_id, cantidad, precio)
+VALUES (3, 6, 1, 1800.0),  -- 1x Guitarra Stratocaster
+       (3, 4, 2, 150.0);   -- 2x Micrófonos
+
+-- FACTURA 4: Compra grande (mayorista) - Agustin
+INSERT INTO Facturas (fecha, usuario_id, forma_pago_id, sede_id, cliente_nombre, cliente_apellido, cliente_celular, activo)
+VALUES ('2025-06-12 09:00:00', 5, 7, 1, 'Local', 'Musical', '11-9876-5432', true);
+
+-- Detalles Factura 4: Muchos productos
+INSERT INTO Detalle_Factura (factura_id, producto_id, cantidad, precio)
+VALUES (4, 2, 3, 1200.0),  -- 3x Guitarra RG Series
+       (4, 5, 2, 2500.0),  -- 2x Batería Electrónica
+       (4, 4, 5, 150.0);   -- 5x Micrófonos
+
+-- FACTURA 5: Cancelada (para testing activo=false) - Agustin
+INSERT INTO Facturas (fecha, usuario_id, forma_pago_id, sede_id, cliente_nombre, activo)
+VALUES ('2025-06-12 11:30:00', 5, 1, 1, 'Cancelada', false);
+
+-- Sin detalles porque se canceló antes de procesar
