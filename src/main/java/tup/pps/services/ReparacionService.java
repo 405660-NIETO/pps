@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tup.pps.dtos.ReparacionDTO;
+import tup.pps.entities.FacturaEntity;
 import tup.pps.models.Reparacion;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.util.List;
 @Service
 public interface ReparacionService {
     Reparacion save(ReparacionDTO reparacionDTO);
+    Reparacion save(ReparacionDTO reparacionDTO, FacturaEntity factura);
     Reparacion update(Long id, ReparacionDTO reparacionDTO);
     Page<Reparacion> findAll(
             Pageable pageable,

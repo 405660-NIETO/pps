@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 public class ReparacionDTO {
     private Long usuarioId;  // ID del luthier/empleado
-    private Long facturaId;  // asociar a factura existente
     private String detalles;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaEntrega;

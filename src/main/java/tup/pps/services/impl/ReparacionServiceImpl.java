@@ -7,10 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import tup.pps.dtos.ReparacionDTO;
-import tup.pps.entities.ReparacionEntity;
-import tup.pps.entities.ReparacionXTrabajoEntity;
-import tup.pps.entities.TrabajoEntity;
-import tup.pps.entities.UsuarioEntity;
+import tup.pps.entities.*;
 import tup.pps.exceptions.ConflictiveStateException;
 import tup.pps.exceptions.EntryNotFoundException;
 import tup.pps.models.Reparacion;
@@ -178,7 +175,13 @@ public class ReparacionServiceImpl implements ReparacionService {
         }
     }
 
+    @Override
     public Reparacion save(ReparacionDTO reparacionDTO) {
+        return save(reparacionDTO, null); // Guardar para el endpoint de reparacion
+    }
+    
+    @Override
+    public Reparacion save(ReparacionDTO reparacionDTO, FacturaEntity factura) {
         // 1. Resolver USUARIO
         UsuarioEntity usuario = resolverUsuario(reparacionDTO.getUsuarioId());
 
@@ -186,7 +189,7 @@ public class ReparacionServiceImpl implements ReparacionService {
         List<TrabajoEntity> trabajos = resolverTrabajos(reparacionDTO.getTrabajos());
 
         // 3. Crear REPARACIÓN
-        ReparacionEntity reparacion = crearReparacion(reparacionDTO, usuario);
+        ReparacionEntity reparacion = crearReparacion(reparacionDTO, usuario,  factura);
 
         // 4. Crear relaciones REPARACION_X_TRABAJO
         crearRelacionesTrabajos(reparacion, trabajos);
@@ -213,7 +216,7 @@ public class ReparacionServiceImpl implements ReparacionService {
         return trabajos;
     }
 
-    private ReparacionEntity crearReparacion(ReparacionDTO dto, UsuarioEntity usuario) {
+    private ReparacionEntity crearReparacion(ReparacionDTO dto, UsuarioEntity usuario, FacturaEntity factura) {
         ReparacionEntity entity = new ReparacionEntity();
         entity.setUsuario(usuario);
         entity.setDetalles(dto.getDetalles());
@@ -221,7 +224,7 @@ public class ReparacionServiceImpl implements ReparacionService {
         entity.setFechaEntrega(dto.getFechaEntrega());
         entity.setPrecio(dto.getPrecio());
         entity.setActivo(true);
-        entity.setFactura(null);  // Por ahora null
+        entity.setFactura(factura);  // ← Puede ser null (independiente) o entity (desde factura)
 
         return repository.save(entity);
     }
