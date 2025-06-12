@@ -90,4 +90,16 @@ public class DetalleFacturaServiceImpl implements DetalleFacturaService {
                 .map(entity -> modelMapper.map(entity, DetalleFactura.class))
                 .toList();
     }
+
+    @Override
+    public void devolverStock(List<DetalleFactura> detalles) {
+        for (DetalleFactura detalle : detalles) {
+            ProductoEntity producto = productoService.findEntityById(detalle.getProducto().getId())
+                    .orElseThrow(() -> new EntryNotFoundException("Producto no encontrado"));
+
+            // Devolver stock
+            producto.setStock(producto.getStock() + detalle.getCantidad());
+            productoService.actualizarStock(producto);
+        }
+    }
 }

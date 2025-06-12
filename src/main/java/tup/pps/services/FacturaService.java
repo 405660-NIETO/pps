@@ -28,4 +28,5 @@ public interface FacturaService {
             Integer cantidadItemsMin,
             Boolean activo
     );
+    void delete(Long facturaId);
 }

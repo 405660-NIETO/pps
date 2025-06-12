@@ -60,4 +60,10 @@ public class FacturaController {
                 activo
         ), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteFactura(@PathVariable Long id) {
+        facturaService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

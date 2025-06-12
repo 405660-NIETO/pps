@@ -12,4 +12,5 @@ public interface DetalleFacturaService {
     DetalleFactura save(DetalleFacturaDTO dto, FacturaEntity factura);
     DetalleFactura findById(Long id);
     List<DetalleFactura> findByFacturaId(Long facturaId);
+    void devolverStock(List<DetalleFactura> detalles);
 }

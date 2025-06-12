@@ -52,6 +52,46 @@ public class FacturaServiceImpl implements FacturaService {
     }
 
     @Override
+    public void delete(Long facturaId) {
+        // 1. Buscar factura activa
+        FacturaEntity factura = repository.findById(facturaId)
+                .orElseThrow(() -> new EntryNotFoundException("Factura no encontrada"));
+
+        if (!factura.getActivo()) {
+            throw new ConflictiveStateException("La factura ya está cancelada");
+        }
+
+        // 2. RESTAURAR stock de productos
+        restaurarStockProductos(factura);
+
+        // 3. "DESSELLAR" reparaciones
+        dessellarReparaciones(factura);
+
+        // 4. Cancelar factura
+        factura.setActivo(false);
+        repository.save(factura);
+    }
+
+    private void restaurarStockProductos(FacturaEntity factura) {
+        List<DetalleFactura> detalles = detalleFacturaService.findByFacturaId(factura.getId());
+        detalleFacturaService.devolverStock(detalles);
+    }
+
+    private void dessellarReparaciones(FacturaEntity factura) {
+        List<Reparacion> reparaciones = reparacionService.findByFacturaId(factura.getId());
+
+        for (Reparacion reparacion : reparaciones) {
+            ReparacionEntity reparacionEntity = reparacionService.findEntityById(reparacion.getId())
+                    .orElseThrow(() -> new EntryNotFoundException("Reparacion no encontrada"));
+
+            // "Dessellar" - vuelve a ser editable
+            reparacionEntity.setFactura(null);
+            reparacionEntity.setFechaEntrega(null);
+            reparacionService.actualizarReparacion(reparacionEntity);
+        }
+    }
+
+    @Override
     public Page<Factura> findAll(
             Pageable pageable,
             LocalDateTime fechaDesde,
