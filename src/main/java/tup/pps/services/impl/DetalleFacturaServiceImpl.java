@@ -26,6 +26,14 @@ public class DetalleFacturaServiceImpl implements DetalleFacturaService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Override
+    public DetalleFactura findById(Long id) {
+        DetalleFacturaEntity detalle = repository.findById(id)
+                .orElseThrow(() -> new EntryNotFoundException("No se encontro ningun detalle de factura con ese ID"));
+
+        return modelMapper.map(detalle, DetalleFactura.class);
+    }
+
     // DetalleFacturaServiceImpl - estructura base
     @Override
     public DetalleFactura save(DetalleFacturaDTO dto, FacturaEntity factura) {
