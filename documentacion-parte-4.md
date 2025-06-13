@@ -456,37 +456,82 @@ GET /facturas/page?fechaDesde=2025-06-01&tieneProductos=true&tieneReparaciones=t
 
 ---
 
-## ⚠️ **Delete() - La Funcionalidad Pendiente**
+## 🔁️ **Delete() - La "Uno-Reverse Card" Para Devolver El Stock**
 
-### **Lógica de Cancelación Planificada:**
+### **Lógica de Cancelación de Factura:**
 
 ```java
-// TODO: Implementar en próxima iteración
-public void delete(Long facturaId) {
-    // 1. Marcar factura como cancelada
-    facturaEntity.setActivo(false);
-    
-    // 2. RESTAURAR stock de productos automáticamente
-    for (DetalleFactura detalle : facturaEntity.getDetalles()) {
-        ProductoEntity producto = detalle.getProducto();
-        producto.setStock(producto.getStock() + detalle.getCantidad());
-        productoService.actualizarStock(producto);
+    public void delete(Long facturaId) {
+    // 1. Buscar factura activa
+    FacturaEntity factura = repository.findById(facturaId)
+            .orElseThrow(() -> new EntryNotFoundException("Factura no encontrada"));
+
+    if (!factura.getActivo()) {
+        throw new ConflictiveStateException("La factura ya está cancelada");
     }
-    
-    // 3. "DESSELLAR" reparaciones (vuelven a ser editables)
-    for (Reparacion reparacion : facturaEntity.getReparaciones()) {
-        reparacionEntity.setFactura(null);
-        reparacionEntity.setFechaEntrega(null);
-        reparacionService.actualizarReparacion(reparacionEntity);
-    }
+
+    // 2. RESTAURAR stock de productos
+    restaurarStockProductos(factura);
+
+    // 3. "DESSELLAR" reparaciones
+    dessellarReparaciones(factura);
+
+    // 4. Cancelar factura
+    factura.setActivo(false);
+    repository.save(factura);
 }
 ```
 
 ### **Validaciones Necesarias:**
 - ✅ Solo facturas activas pueden cancelarse
-- ✅ Timeouts de cancelación (ej: no cancelar después de 24hs)
 - ✅ Logs de auditoría para cancelaciones
-- ✅ Notificaciones al cliente (futuro)
+- ✅ Desligar reparaciones de factura, devolverla como entidad independiente
+- ✅ Devolver el stock utilizado en los detalles
+
+### **Metodos para lograrlo:**
+
+#### **1. restaurarStockProductos() - Delegar a DetalleFacturaService para reponer el stock cancelado:**
+```java
+    private void restaurarStockProductos(FacturaEntity factura) {
+        List<DetalleFactura> detalles = detalleFacturaService.findByFacturaId(factura.getId());
+        detalleFacturaService.devolverStock(detalles);
+    }
+```
+
+
+#### **1.1 devolverStock() - Delegar a DetalleFacturaService para reponer el stock cancelado:**
+```java
+    @Override
+    public void devolverStock(List<DetalleFactura> detalles) {
+        for (DetalleFactura detalle : detalles) {
+            ProductoEntity producto = productoService.findEntityById(detalle.getProducto().getId())
+                    .orElseThrow(() -> new EntryNotFoundException("Producto no encontrado"));
+
+            // Devolver stock
+            producto.setStock(producto.getStock() + detalle.getCantidad());
+            productoService.actualizarStock(producto);
+        }
+    }
+```
+
+#### **2. dessellarReparaciones() - Retornar la reparacion a su estado independiente:**
+
+```java
+    private void dessellarReparaciones(FacturaEntity factura) {
+        List<Reparacion> reparaciones = reparacionService.findByFacturaId(factura.getId());
+
+        for (Reparacion reparacion : reparaciones) {
+            ReparacionEntity reparacionEntity = reparacionService.findEntityById(reparacion.getId())
+                    .orElseThrow(() -> new EntryNotFoundException("Reparacion no encontrada"));
+
+            // "Dessellar" - vuelve a ser editable
+            reparacionEntity.setFactura(null);
+            reparacionEntity.setFechaEntrega(null);
+            reparacionService.actualizarReparacion(reparacionEntity);
+        }
+    }
+```
+
 
 ---
 
@@ -569,17 +614,14 @@ return factura;  // ¿Qué trae? ¿Cuántas queries? ¿N+1 problem?
 ## 🚀 **El Futuro de Facturación**
 
 ### **Integraciones Planificadas:**
-1. **Delete() con restauración automática** - Próxima implementación
 2. **Mercado Pago** - API externa en placeholder existente
 3. **Validation annotations** - Extraer validaciones de Services
 4. **Auditoría avanzada** - Logs de todas las operaciones críticas
 5. **Reportes complejos** - Aprovechar specifications para dashboards
 
 ### **Posibles Extensiones:**
-- **Facturación recurrente** - Para suscripciones o servicios mensuales
 - **Descuentos y promociones** - Sistema de cupones
 - **Facturación internacional** - Multi-moneda y tasas de cambio
-- **Integración contable** - Export a sistemas de contabilidad
 
 ---
 

@@ -50,7 +50,7 @@ Este e-commerce maneja **venta de productos musicales** y **servicios de reparac
 
 ---
 
-### **[📄 Parte 4: Facturación - La Orquestación](./documentacion-parte-4.md)** 🚧
+### **[📄 Parte 4: Facturación - La Orquestación](./documentacion-parte-4.md)**
 **🎭 FacturaService como director de orquesta + Mercado Pago**
 
 **Qué aprenderás:**
@@ -60,7 +60,7 @@ Este e-commerce maneja **venta de productos musicales** y **servicios de reparac
 - ✅ **Validaciones de negocio** complejas
 - ✅ **Testing de flujo completo** end-to-end
 
-**Estado:** 🚧 **EN DESARROLLO** - Próxima a completar
+**Cuándo leer:** ⭐ **CUARTO** - Muestra como se coordinan diferentes partes del sistema en simultáneo
 
 ---
 
@@ -98,15 +98,15 @@ Este e-commerce maneja **venta de productos musicales** y **servicios de reparac
 ## 🎯 **Estado Actual del Desarrollo**
 
 | **Módulo** | **Estado** | **Cobertura** | **Documentación** |
-|---|---|---|---|
-| Tablas Soporte | ✅ Completo | 100% | ✅ Parte 1 |
-| Productos | ✅ Completo | 100% | ✅ Parte 2 |  
-| Reparaciones | ✅ Completo | 100% | ✅ Parte 3 |
-| DetalleFactura | ✅ Completo | 100% | ✅ Parte 3 |
-| Facturación | 🚧 En desarrollo | 25% | 🚧 Parte 4 |
-| Usuarios | ⏳ Pendiente | 10% | ⏳ Parte 5 |
-| Spring Security | ⏳ Pendiente | 0% | ⏳ Parte 6 |
-| Validation | ⏳ Pendiente | 0% | ⏳ Parte 7 |
+|---|---|---------------|---|
+| Tablas Soporte | ✅ Completo | 100%          | ✅ Parte 1 |
+| Productos | ✅ Completo | 100%          | ✅ Parte 2 |  
+| Reparaciones | ✅ Completo | 100%          | ✅ Parte 3 |
+| DetalleFactura | ✅ Completo | 100%          | ✅ Parte 3 |
+| Facturación | ✅ Completo | 100%          | ✅ Parte 4 |
+| Usuarios | ⏳ Pendiente | 10%           | ⏳ Parte 5 |
+| Spring Security | ⏳ Pendiente | 0%            | ⏳ Parte 6 |
+| Validation | ⏳ Pendiente | 0%            | ⏳ Parte 7 |
 
 ---
 
@@ -129,11 +129,11 @@ Este e-commerce maneja **venta de productos musicales** y **servicios de reparac
 
 ## 🚀 **Próximos Pasos**
 
-1. **Completar Parte 4** - Facturación + Mercado Pago
-2. **Crear Parte 5** - UsuarioService CRUD + gestión de roles
-3. **Crear Parte 6** - Spring Security + autenticación
-4. **Crear Parte 7** - Validation + testing strategies
-5. **Crear Parte 8** - Frontend integration con Angular 18
+
+1. **Crear Parte 5** - 🔐 Usuarios + Spring Security
+2. **Crear Parte 6** - 🎨 Frontend
+3. **Crear Parte 7** - 💳 Mercado Pago (placeholder listo)
+4. **Crear Parte 8** - 📧 Emails (isla independiente)
 
 ---
 
