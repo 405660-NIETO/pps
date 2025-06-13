@@ -119,7 +119,18 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public void delete(Long id) {
+        // 1. BUSCAR por ID
+        UsuarioEntity usuario = repository.findById(id)
+                .orElseThrow(() -> new EntryNotFoundException("No se encontro ningun usuario con ese ID"));
 
+        // 2. VALIDAR que esté activo
+        if (!usuario.getActivo()) {
+            throw new ConflictiveStateException("El usuario ya esta desactivado");
+        }
+
+        // 3. DESACTIVAR (borrado lógico)
+        usuario.setActivo(false);
+        repository.save(usuario);
     }
 
     // Metodos para Save
