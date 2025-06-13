@@ -15,4 +15,5 @@ public interface RolService {
     Rol save(String rol);
     void delete(String nombre);
     Optional<RolEntity> findByNombre(String nombre);
+    Optional<RolEntity> findEntityById(Long id);
 }

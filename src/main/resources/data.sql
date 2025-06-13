@@ -95,6 +95,9 @@ VALUES ('marta.luthier@musica.com', 'temp123', 'Marta', 'González', 4, NOW(), t
 INSERT INTO Usuarios (email, password, nombre, apellido, rol_id, fecha_creacion, activo)
 VALUES ('adminm@admin.com', 'admin', 'Agustin', 'Nieto', 1, NOW(), true);
 
+INSERT INTO Usuarios (email, password, nombre, apellido, rol_id, fecha_creacion, activo)
+VALUES ('neho@neho.com', 'admin', 'Neho', 'Inactivo', 1, '2015-07-17 17:00:00', false);
+
 
 -- Reparación de prueba para update
 INSERT INTO Reparaciones (usuario_id, detalles, fecha_inicio, fecha_entrega, precio, activo, factura_id)

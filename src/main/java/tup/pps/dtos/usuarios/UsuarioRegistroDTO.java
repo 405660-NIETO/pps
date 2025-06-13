@@ -12,4 +12,5 @@ public class UsuarioRegistroDTO {
     String password;
     String nombre;
     String apellido;
+    Long rolId;
 }

@@ -113,4 +113,9 @@ public class RolServiceImpl implements RolService {
     public Optional<RolEntity> findByNombre(String nombre) {
         return repository.findByNombre(nombre);
     }
+
+    @Override
+    public Optional<RolEntity> findEntityById(Long id) {
+        return repository.findById(id);
+    }
 }
