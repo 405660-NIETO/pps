@@ -1,8 +1,8 @@
-# 🔐 Parte 5: Usuarios & Login - La Base de Autenticación
+# 👥 Parte 5: Usuarios - La Base de Autenticación
 
 ## Resumen Ejecutivo
 
-Después de completar todo el backend funcional (Tablas Soporte, Productos, Reparaciones y Facturación), desarrollamos el **sistema de usuarios y autenticación** que servirá como base para Spring Security. Esta implementación sigue los mismos patrones arquitectónicos establecidos pero introduce nuevos conceptos como **reactivación inteligente** y **auditoría de login**.
+Después de completar todo el backend funcional (Tablas Soporte, Productos, Reparaciones y Facturación), desarrollamos el **sistema de usuarios** que servirá como base para Spring Security. Esta implementación sigue los mismos patrones arquitectónicos establecidos pero introduce nuevos conceptos como **reactivación inteligente** y **auditoría de login**.
 
 ---
 
@@ -93,44 +93,6 @@ Page<Usuario> findAll(
 
 ---
 
-## 🚀 **LoginService: Autenticación con Auditoría**
-
-### **Arquitectura Separada:**
-Decisión arquitectónica de crear **LoginService independiente** en lugar de mezclar autenticación con CRUD de usuarios.
-
-### **LoginResultDTO - Respuesta Segura:**
-```java
-// Sin password - Solo datos necesarios para frontend
-String email, nombre, apellido;
-LocalDateTime fechaLogin;
-String rol;  // Nombre del rol para UI
-```
-
-### **Flujo de Login Completo:**
-```java
-public LoginResultDTO login(UsuarioLoginDTO loginDTO) {
-    // 1. BUSCAR usuario por email
-    Usuario usuario = usuarioService.findByEmail(email);
-    
-    // 2. VALIDAR password (plain text para prototipo)
-    if (!usuario.getPassword().equals(loginDTO.getPassword())) {
-        throw new UnauthorizedException("Credenciales incorrectas");
-    }
-    
-    // 3. VALIDAR usuario activo
-    if (!usuario.getActivo()) {
-        throw new ConflictiveStateException("Usuario inactivo");
-    }
-    
-    // 4. ACTUALIZAR fechaLogin (auditoría)
-    entity.setFechaLogin(LocalDateTime.now());
-    usuarioService.actualizarUsuario(entity);
-    
-    // 5. RETORNAR respuesta segura
-    return crearLoginResult(usuario);
-}
-```
-
 ### **Beneficios del Diseño:**
 - ✅ **Separación de responsabilidades** - Login ≠ CRUD
 - ✅ **Auditoría automática** - Tracking de accesos
@@ -154,7 +116,6 @@ public LoginResultDTO login(UsuarioLoginDTO loginDTO) {
 - Auditoría de login para compliance
 
 ### **UX Inteligente:**
-- Update flexible (perfil solo O password solo O ambos)
 - Filtros combinables para búsquedas administrativas
 - Respuestas de error específicas y claras
 
@@ -165,12 +126,10 @@ public LoginResultDTO login(UsuarioLoginDTO loginDTO) {
 ### **Base Establecida:**
 - ✅ **UserDetailsService ready** - findByEmail() implementado
 - ✅ **Role-based access** - Rol asignado y validado
-- ✅ **Session preparation** - Login temporal funcional
 - ✅ **Password handling** - Estructura lista para encryption
 
 ### **Próxima Integración:**
 1. **UserDetailsService** implementation usando findByEmail()
-2. **Session configuration** reemplazando LoginService temporal
 3. **Role-based endpoint protection** usando roles existentes
 
 ---
@@ -179,7 +138,6 @@ public LoginResultDTO login(UsuarioLoginDTO loginDTO) {
 
 ### **Patrones Aplicados:**
 - ✅ **Specifications avanzadas** - 5 filtros combinables
-- ✅ **Separación de responsabilidades** - UsuarioService ≠ LoginService
 - ✅ **Reactivación inteligente** - Preserva historial completo
 - ✅ **Validaciones de negocio** - Seguridad y integridad
 - ✅ **Auditoría automática** - Tracking de fechaLogin
@@ -194,10 +152,9 @@ public LoginResultDTO login(UsuarioLoginDTO loginDTO) {
 
 ## 🚀 **Conclusión**
 
-El desarrollo de **Usuarios & Login** marca el **final del backend funcional**. Con esta implementación, tenemos:
+El desarrollo de **Usuarios** marca el **final del backend funcional**. Con esta implementación, tenemos:
 
 - ✅ **Motor completo** - Todos los CRUDs y lógica de negocio terminados
-- ✅ **Autenticación base** - Sistema de login funcionando
 - ✅ **Preparación Spring Security** - Integración sin fricción
 - ✅ **Auditoría empresarial** - Tracking completo de usuarios
 
