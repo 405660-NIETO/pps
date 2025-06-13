@@ -90,9 +90,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Usuario findByEmail(String email) {
+    public UsuarioEntity findByEmail(String email) {
         return repository.findByEmail(email)
-                .map(entity -> modelMapper.map(entity, Usuario.class))
                 .orElseThrow(() -> new EntryNotFoundException("No se encontro ningun usuario con ese email"));
     }
 

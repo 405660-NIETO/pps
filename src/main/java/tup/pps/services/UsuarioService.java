@@ -17,7 +17,7 @@ public interface UsuarioService {
     Usuario save(UsuarioRegistroDTO dto);           // Registro + reactivación
     Usuario update(Long id, UsuarioUpdateDTO dto);  // Perfil + password
     Usuario findById(Long id);                      // Para Spring Security
-    Usuario findByEmail(String email);             // Login validation
+    UsuarioEntity findByEmail(String email);             // Login validation
     Page<Usuario> findAll(
             Pageable pageable,
             String email,
