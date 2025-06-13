@@ -18,11 +18,14 @@ public class SubscripcionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false)
     private LocalDateTime fechaAlta;
 
     private LocalDateTime fechaBaja;
 
+    @Column(nullable = false)
     private Boolean activo;
 }

@@ -18,14 +18,15 @@ public class FacturaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private LocalDateTime fecha;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "usuario_id", nullable = false)
     private UsuarioEntity usuario;
 
     @ManyToOne
-    @JoinColumn(name = "forma_pago_id")
+    @JoinColumn(name = "forma_pago_id", nullable = false)
     private FormaPagoEntity formaPago;
 
     @ManyToOne
@@ -43,4 +44,7 @@ public class FacturaEntity {
     private String clienteCelular;
 
     private String clienteEmail;
+
+    @Column(nullable = false)
+    private Boolean activo;
 }
