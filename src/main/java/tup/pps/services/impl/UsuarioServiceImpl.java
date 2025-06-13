@@ -91,7 +91,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Usuario findByEmail(String email) {
-        return null;
+        return repository.findByEmail(email)
+                .map(entity -> modelMapper.map(entity, Usuario.class))
+                .orElseThrow(() -> new EntryNotFoundException("No se encontro ningun usuario con ese email"));
     }
 
     @Override
@@ -130,6 +132,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         // 3. DESACTIVAR (borrado lógico)
         usuario.setActivo(false);
+        repository.save(usuario);
+    }
+
+    @Override
+    public void actualizarUsuario(UsuarioEntity usuario) {
         repository.save(usuario);
     }
 

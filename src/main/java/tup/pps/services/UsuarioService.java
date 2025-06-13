@@ -28,4 +28,5 @@ public interface UsuarioService {
             Boolean activo
     );
     void delete(Long id);                          // Dar de baja
+    void actualizarUsuario(UsuarioEntity usuario);
 }
