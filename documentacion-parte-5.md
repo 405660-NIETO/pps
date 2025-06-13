@@ -26,8 +26,6 @@ Long rolId;  // Admin selecciona desde dropdown
 String nombre, apellido;
 String passwordActual, passwordNueva;  // Opcionales para cambio de password
 
-// UsuarioLoginDTO - Simple para autenticación
-String email, password;
 ```
 
 ---
