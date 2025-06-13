@@ -7,6 +7,7 @@ import tup.pps.dtos.usuarios.UsuarioRegistroDTO;
 import tup.pps.dtos.usuarios.UsuarioUpdateDTO;
 import tup.pps.entities.RolEntity;
 import tup.pps.entities.UsuarioEntity;
+import tup.pps.exceptions.ConflictiveStateException;
 import tup.pps.exceptions.EntryNotFoundException;
 import tup.pps.exceptions.ResourceAlreadyExistsException;
 import tup.pps.models.Usuario;
@@ -58,7 +59,21 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Usuario update(Long id, UsuarioUpdateDTO dto) {
-        return null;
+        // 1. BUSCAR usuario existente
+        UsuarioEntity usuario = repository.findById(id)
+                .orElseThrow(() -> new EntryNotFoundException("Usuario no encontrado"));
+
+        // 2. ACTUALIZAR campos básicos (siempre)
+        actualizarPerfil(usuario, dto);
+
+        // 3. GESTIONAR password (solo si viene en DTO)
+        if (vienePasswordEnDTO(dto)) {
+            actualizarPassword(usuario, dto);
+        }
+
+        // 4. GUARDAR y retornar
+        UsuarioEntity saved = repository.save(usuario);
+        return modelMapper.map(saved, Usuario.class);
     }
 
     @Override
@@ -80,6 +95,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void delete(Long id) {
 
     }
+
+    // Metodos para Save
 
     private RolEntity resolverRol(Long rolId) {
         return rolService.findEntityById(rolId)
@@ -110,5 +127,26 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         UsuarioEntity saved = repository.save(entity);
         return modelMapper.map(saved, Usuario.class);
+    }
+
+    // Metodos para Update
+    private void actualizarPerfil(UsuarioEntity usuario, UsuarioUpdateDTO dto) {
+        usuario.setNombre(dto.getNombre());
+        usuario.setApellido(dto.getApellido());
+    }
+
+    private boolean vienePasswordEnDTO(UsuarioUpdateDTO dto) {
+        return dto.getPasswordActual() != null && !dto.getPasswordActual().isBlank() &&
+                dto.getPasswordNueva() != null && !dto.getPasswordNueva().isBlank();
+    }
+
+    private void actualizarPassword(UsuarioEntity usuario, UsuarioUpdateDTO dto) {
+        // Validar password actual
+        if (!usuario.getPassword().equals(dto.getPasswordActual())) {
+            throw new ConflictiveStateException("Password actual incorrecta");
+        }
+
+        // Actualizar a nueva password
+        usuario.setPassword(dto.getPasswordNueva());
     }
 }
