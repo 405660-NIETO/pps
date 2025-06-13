@@ -30,4 +30,9 @@ public class UsuarioController {
     ) {
         return ResponseEntity.ok(usuarioService.update(id, usuarioDTO));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuario> getUsuarioById(@PathVariable Long id) {
+        return ResponseEntity.ok(usuarioService.findById(id));
+    }
 }

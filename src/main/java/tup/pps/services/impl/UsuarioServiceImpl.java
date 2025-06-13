@@ -2,6 +2,8 @@ package tup.pps.services.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tup.pps.dtos.usuarios.UsuarioRegistroDTO;
 import tup.pps.dtos.usuarios.UsuarioUpdateDTO;
@@ -78,7 +80,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Usuario findById(Long id) {
-        return null;
+        return repository.findById(id)
+                .map(entity -> modelMapper.map(entity, Usuario.class))
+                .orElseThrow(() -> new EntryNotFoundException("No se encontro ningun usuario con ese ID"));
     }
 
     @Override
@@ -87,8 +91,15 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public List<Usuario> findAll(String nombre, Boolean activo) {
-        return List.of();
+    public Page<Usuario> findAll(
+            Pageable pageable,
+            String email,
+            String nombreApellido,
+            Long rolId,
+            LocalDateTime fechaDesde,
+            LocalDateTime fechaHasta, 
+            Boolean activo) {
+        return null;
     }
 
     @Override
