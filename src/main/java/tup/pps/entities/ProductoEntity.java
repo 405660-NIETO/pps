@@ -16,6 +16,7 @@ public class ProductoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nombre;
 
     private String comentarios;
@@ -23,12 +24,15 @@ public class ProductoEntity {
     private String fotoUrl;
 
     @ManyToOne
-    @JoinColumn(name = "marca_id")
+    @JoinColumn(name = "marca_id", nullable = false)
     private MarcaEntity marca;
 
+    @Column(nullable = false)
     private Integer stock;
 
+    @Column(nullable = false)
     private Double precio;
 
+    @Column(nullable = false)
     private Boolean activo;
 }

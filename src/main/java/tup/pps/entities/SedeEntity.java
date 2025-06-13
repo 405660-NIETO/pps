@@ -16,9 +16,12 @@ public class SedeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nombre;
 
+    @Column(nullable = false, unique = true)
     private String direccion;
 
+    @Column(nullable = false)
     private Boolean activo;
 }

@@ -1,0 +1,164 @@
+INSERT INTO Categorias (nombre, activo) VALUES ('Guitarras', true);
+INSERT INTO Categorias (nombre, activo) VALUES ('Teclados', true);
+INSERT INTO Categorias (nombre, activo) VALUES ('Percusión', true);
+INSERT INTO Categorias (nombre, activo) VALUES ('Accesorios', false);
+INSERT INTO Categorias (nombre, activo) VALUES ('Eléctricas', true);
+
+INSERT INTO Marcas (nombre, activo) VALUES ('Fender', true);
+INSERT INTO Marcas (nombre, activo) VALUES ('Gibson', true);
+INSERT INTO Marcas (nombre, activo) VALUES ('Yamaha', true);
+INSERT INTO Marcas (nombre, activo) VALUES ('Ibañez', true);
+
+INSERT INTO Trabajos (nombre, activo) VALUES ('Cambio de Cuerdas', true);
+INSERT INTO Trabajos (nombre, activo) VALUES ('Calibracion', true);
+INSERT INTO Trabajos (nombre, activo) VALUES ('Cambio de Traste', false);
+INSERT INTO Trabajos (nombre, activo) VALUES ('Cambio de Pastillas', true);
+
+INSERT INTO Forma_Pago (nombre, activo) VALUES ('Efectivo', true);
+INSERT INTO Forma_Pago (nombre, activo) VALUES ('Debito', true);
+INSERT INTO Forma_Pago (nombre, activo) VALUES ('Credito', true);
+INSERT INTO Forma_Pago (nombre, activo) VALUES ('Prepago', true);
+INSERT INTO Forma_Pago (nombre, activo) VALUES ('MODO', true);
+INSERT INTO Forma_Pago (nombre, activo) VALUES ('Transferencia', true);
+INSERT INTO Forma_Pago (nombre, activo) VALUES ('Mercado Pago', true);
+
+INSERT INTO Sedes (nombre, direccion, activo) VALUES ('Tienda de Musica', 'Calle 1', true);
+INSERT INTO Sedes (nombre, direccion, activo) VALUES ('Tienda de Musica', 'Calle 2', false);
+INSERT INTO Sedes (nombre, direccion, activo) VALUES ('Tienda de Musica', 'Calle 3', true);
+INSERT INTO Sedes (nombre, direccion, activo) VALUES ('Tienda de Musica', 'Calle 4', true);
+
+INSERT INTO Roles (nombre, activo) VALUES ('ADMINISTRADOR', true);
+INSERT INTO Roles (nombre, activo) VALUES ('VENDEDOR', false);
+INSERT INTO Roles (nombre, activo) VALUES ('EMPLEADO', true);
+INSERT INTO Roles (nombre, activo) VALUES ('LUTHIER', true);
+
+-- Producto de prueba para update
+INSERT INTO Productos (nombre, comentarios, foto_url, marca_id, stock, precio, activo)
+VALUES ('Guitarra Les Paul', 'Guitarra clásica', 'https://ejemplo.com/lespaul.jpg', 2, 10, 1500.00, true);
+
+-- Productos adicionales para testing
+INSERT INTO Productos (nombre, comentarios, foto_url, marca_id, stock, precio, activo)
+VALUES ('Guitarra RG Series', 'Guitarra eléctrica para rock', 'https://ejemplo.com/ibanez.jpg', 4, 8, 1200.00, false);
+
+INSERT INTO Productos (nombre, comentarios, foto_url, marca_id, stock, precio, activo)
+VALUES ('Teclado PSR-E373', 'Teclado digital 61 teclas', 'https://ejemplo.com/yamaha-teclado.jpg', 3, 15, 800.00, true);
+
+INSERT INTO Productos (nombre, comentarios, foto_url, marca_id, stock, precio, activo)
+VALUES ('Micrófono SM58', 'Micrófono dinámico profesional', 'https://ejemplo.com/mic.jpg', 3, 25, 150.00, true);
+
+INSERT INTO Productos (nombre, comentarios, foto_url, marca_id, stock, precio, activo)
+VALUES ('Batería Electrónica DTX432K', 'Kit de batería electrónica', 'https://ejemplo.com/yamaha-drums.jpg', 3, 5, 2500.00, true);
+
+INSERT INTO Productos (nombre, comentarios, foto_url, marca_id, stock, precio, activo)
+VALUES ('Guitarra Stratocaster', 'Guitarra eléctrica clásica', 'https://ejemplo.com/fender-strat.jpg', 1, 12, 1800.00, true);
+
+
+-- Relaciones iniciales del producto (ID 1 suponiendo que es el primer producto)
+INSERT INTO Productos_X_Categorias (producto_id, categoria_id, activo) VALUES (1, 1, true);  -- Guitarras
+INSERT INTO Productos_X_Categorias (producto_id, categoria_id, activo) VALUES (1, 3, true);  -- Percusión
+
+-- Relaciones para los productos (IDs 2-6)
+-- Guitarra Ibanez (ID 2): Guitarras + Eléctricas
+INSERT INTO Productos_X_Categorias (producto_id, categoria_id, activo) VALUES (2, 1, true);  -- Guitarras
+
+INSERT INTO Productos_X_Categorias (producto_id, categoria_id, activo) VALUES (2, 5, true);  -- Eléctricas
+
+-- Teclado Yamaha (ID 3): Teclados
+INSERT INTO Productos_X_Categorias (producto_id, categoria_id, activo) VALUES (3, 2, true);  -- Teclados
+
+-- Micrófono Yamaha (ID 4): Accesorios (reactivar la categoría)
+UPDATE Categorias SET activo = true WHERE id = 4;  -- Reactivar Accesorios
+INSERT INTO Productos_X_Categorias (producto_id, categoria_id, activo) VALUES (4, 4, true);  -- Accesorios
+
+-- Batería Yamaha (ID 5): Percusión + Eléctricas
+INSERT INTO Productos_X_Categorias (producto_id, categoria_id, activo) VALUES (5, 3, true);  -- Percusión
+INSERT INTO Productos_X_Categorias (producto_id, categoria_id, activo) VALUES (5, 5, true);  -- Eléctricas
+
+-- Guitarra Fender (ID 6): Guitarras + Eléctricas
+INSERT INTO Productos_X_Categorias (producto_id, categoria_id, activo) VALUES (6, 1, true);  -- Guitarras
+INSERT INTO Productos_X_Categorias (producto_id, categoria_id, activo) VALUES (6, 5, true);  -- Eléctricas
+
+-- Usuarios luthiers para testing
+INSERT INTO Usuarios (email, password, nombre, apellido, rol_id, fecha_creacion, activo)
+VALUES ('juan.luthier@musica.com', 'temp123', 'Juan', 'Pérez', 4, NOW(), true);
+
+INSERT INTO Usuarios (email, password, nombre, apellido, rol_id, fecha_creacion, activo)
+VALUES ('maria.luthier@musica.com', 'temp123', 'María', 'García', 4, NOW(), true);
+
+-- Usuarios adicionales para testing de búsqueda
+INSERT INTO Usuarios (email, password, nombre, apellido, rol_id, fecha_creacion, activo)
+VALUES ('justin.luthier@musica.com', 'temp123', 'Justin', 'Martínez', 4, NOW(), true);
+
+INSERT INTO Usuarios (email, password, nombre, apellido, rol_id, fecha_creacion, activo)
+VALUES ('marta.luthier@musica.com', 'temp123', 'Marta', 'González', 4, NOW(), true);
+
+INSERT INTO Usuarios (email, password, nombre, apellido, rol_id, fecha_creacion, activo)
+VALUES ('adminm@admin.com', 'admin', 'Agustin', 'Nieto', 1, NOW(), true);
+
+INSERT INTO Usuarios (email, password, nombre, apellido, rol_id, fecha_creacion, activo)
+VALUES ('neho@neho.com', 'admin', 'Neho', 'Inactivo', 1, '2015-07-17 17:00:00', false);
+
+
+-- Reparación de prueba para update
+INSERT INTO Reparaciones (usuario_id, detalles, fecha_inicio, fecha_entrega, precio, activo, factura_id)
+VALUES (1, 'Guitarra clásica - mantenimiento básico', '2025-06-10 09:00:00', '2025-11-10 17:00:00', 120.00, true, null);
+
+-- Reparación de Justin
+INSERT INTO Reparaciones (usuario_id, detalles, fecha_inicio, fecha_entrega, precio, activo, factura_id)
+VALUES (3, 'Guitarra acústica - cambio de clavijas', '2025-06-10 08:00:00', '2025-06-10 16:00:00', 80.00, true, null);
+
+-- Reparación de Marta
+INSERT INTO Reparaciones (usuario_id, detalles, fecha_inicio, fecha_entrega, precio, activo, factura_id)
+VALUES (4, 'Bajo eléctrico - ajuste de pastillas', '2025-06-11 09:00:00', '2025-06-12 14:00:00', 95.50, true, null);
+
+
+-- Relaciones iniciales de la reparación (ID 1 suponiendo que es la primera reparación)
+INSERT INTO Reparaciones_X_Trabajos (reparacion_id, trabajo_id, activo) VALUES (1, 1, true);  -- Cambio de Cuerdas
+INSERT INTO Reparaciones_X_Trabajos (reparacion_id, trabajo_id, activo) VALUES (1, 2, true);  -- Calibracion
+-- Relaciones para las reparaciones
+INSERT INTO Reparaciones_X_Trabajos (reparacion_id, trabajo_id, activo) VALUES (2, 4, true);  -- Justin: Cambio de Pastillas
+INSERT INTO Reparaciones_X_Trabajos (reparacion_id, trabajo_id, activo) VALUES (3, 2, true);  -- Marta: Calibracion
+INSERT INTO Reparaciones_X_Trabajos (reparacion_id, trabajo_id, activo) VALUES (3, 4, true);  -- Marta: Cambio de Pastillas
+
+
+
+
+-- FACTURA 1: Solo productos (venta mostrador) - Agustin
+INSERT INTO Facturas (fecha, usuario_id, forma_pago_id, sede_id, cliente_nombre, cliente_apellido, cliente_telefono, activo)
+VALUES ('2025-06-10 10:30:00', 5, 1, 1, 'Carlos', 'Rodriguez', '11-2345-6789', true);
+
+-- Detalles Factura 1: 2 guitarras + 1 teclado
+INSERT INTO Detalle_Factura (factura_id, producto_id, cantidad, precio)
+VALUES (1, 1, 2, 1500.0),  -- 2x Guitarra Les Paul
+       (1, 3, 1, 800.0);   -- 1x Teclado PSR-E373
+
+-- FACTURA 2: Solo reparaciones (retiro servicios) - Agustin
+INSERT INTO Facturas (fecha, usuario_id, forma_pago_id, sede_id, cliente_nombre, cliente_email, activo)
+VALUES ('2025-06-11 14:15:00', 5, 2, 1, 'María', 'maria@email.com', true);
+
+-- Reparaciones ya están asociadas a facturas en data.sql original
+
+-- FACTURA 3: Mixta (retiro + compra adicional) - Agustin
+INSERT INTO Facturas (fecha, usuario_id, forma_pago_id, sede_id, cliente_nombre, cliente_documento, activo)
+VALUES ('2025-06-11 16:45:00', 5, 3, 2, 'Roberto', '12345678', true);
+
+-- Detalles Factura 3: 1 guitarra + accesorios
+INSERT INTO Detalle_Factura (factura_id, producto_id, cantidad, precio)
+VALUES (3, 6, 1, 1800.0),  -- 1x Guitarra Stratocaster
+       (3, 4, 2, 150.0);   -- 2x Micrófonos
+
+-- FACTURA 4: Compra grande (mayorista) - Agustin
+INSERT INTO Facturas (fecha, usuario_id, forma_pago_id, sede_id, cliente_nombre, cliente_apellido, cliente_celular, activo)
+VALUES ('2025-06-12 09:00:00', 5, 7, 1, 'Local', 'Musical', '11-9876-5432', true);
+
+-- Detalles Factura 4: Muchos productos
+INSERT INTO Detalle_Factura (factura_id, producto_id, cantidad, precio)
+VALUES (4, 2, 3, 1200.0),  -- 3x Guitarra RG Series
+       (4, 5, 2, 2500.0),  -- 2x Batería Electrónica
+       (4, 4, 5, 150.0);   -- 5x Micrófonos
+
+-- FACTURA 5: Cancelada (para testing activo=false) - Agustin
+INSERT INTO Facturas (fecha, usuario_id, forma_pago_id, sede_id, cliente_nombre, activo)
+VALUES ('2025-06-12 11:30:00', 5, 1, 1, 'Cancelada', false);
+
+-- Sin detalles porque se canceló antes de procesar

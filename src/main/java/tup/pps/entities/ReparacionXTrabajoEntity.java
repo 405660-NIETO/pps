@@ -17,10 +17,13 @@ public class ReparacionXTrabajoEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "reparacion_id")
+    @JoinColumn(name = "reparacion_id", nullable = false)
     private ReparacionEntity reparacion;
 
     @ManyToOne
-    @JoinColumn(name = "trabajo_id")
+    @JoinColumn(name = "trabajo_id", nullable = false)
     private TrabajoEntity trabajo;
+
+    @Column(nullable = false)
+    private Boolean activo;
 }
