@@ -21,7 +21,7 @@ public interface UsuarioService {
     Page<Usuario> findAll(
             Pageable pageable,
             String email,
-            String nombreApellido,  // Búsqueda combinada
+            String nombre,  // Búsqueda combinada
             Long rolId,
             LocalDateTime fechaDesde,
             LocalDateTime fechaHasta,

@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import tup.pps.dtos.usuarios.UsuarioRegistroDTO;
 import tup.pps.dtos.usuarios.UsuarioUpdateDTO;
@@ -14,11 +15,11 @@ import tup.pps.exceptions.EntryNotFoundException;
 import tup.pps.exceptions.ResourceAlreadyExistsException;
 import tup.pps.models.Usuario;
 import tup.pps.repositories.UsuarioRepository;
+import tup.pps.repositories.specs.UsuarioSpecification;
 import tup.pps.services.RolService;
 import tup.pps.services.UsuarioService;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,6 +27,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private UsuarioRepository repository;
+
+    @Autowired
+    private UsuarioSpecification specification;
 
     @Autowired
     private RolService rolService;
@@ -94,12 +98,23 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Page<Usuario> findAll(
             Pageable pageable,
             String email,
-            String nombreApellido,
+            String nombre,
             Long rolId,
             LocalDateTime fechaDesde,
-            LocalDateTime fechaHasta, 
-            Boolean activo) {
-        return null;
+            LocalDateTime fechaHasta,
+            Boolean activo
+    ) {
+        // Combinar todas las specifications - Pattern exacto de ProductoService
+        Specification<UsuarioEntity> spec = specification.byEmail(email)
+                .and(specification.byNombreApellido(nombre))
+                .and(specification.byRol(rolId))
+                .and(specification.byFechaRango(fechaDesde, fechaHasta))
+                .and(specification.byActivo(activo));
+
+        Page<UsuarioEntity> entityPage = repository.findAll(spec, pageable);
+
+        // Mapear directo - No necesita devolverModelo como Productos
+        return entityPage.map(entity -> modelMapper.map(entity, Usuario.class));
     }
 
     @Override
