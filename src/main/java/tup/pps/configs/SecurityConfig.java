@@ -6,6 +6,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -14,13 +17,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .cors(cors -> cors.and())
-                .authorizeHttpRequests(auth -> auth
-                        // PÚBLICOS (sin login)
-                        .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/ping").permitAll()  // Easter egg
+                // 🔧 CORS más específico
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                        // USUARIOS - Control estricto
+                // 🔧 CSRF completamente deshabilitado
+                .csrf(csrf -> csrf.disable())
+
+                // 🔧 Headers permisivos para desarrollo
+                .headers(headers -> headers
+                        .frameOptions().disable()
+                        .contentTypeOptions().disable()
+                        .httpStrictTransportSecurity().disable()
+                )
+
+                .authorizeHttpRequests(auth -> auth
+                        // PÚBLICOS (sin login) - MÁS ESPECÍFICOS
+                        .requestMatchers("/", "/ping", "/login", "/logout").permitAll()
+                        .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
+                        // USUARIOS - Control estricto (igual que antes)
                         .requestMatchers(HttpMethod.GET, "/usuarios/*", "/usuarios/page").hasAnyRole("ADMINISTRADOR", "EMPLEADO", "LUTHIER")
                         .requestMatchers(HttpMethod.PUT, "/usuarios/*").hasRole("ADMINISTRADOR")
                         .requestMatchers(HttpMethod.POST, "/usuarios").hasRole("ADMINISTRADOR")
@@ -79,32 +94,53 @@ public class SecurityConfig {
                         // Todo lo demás requiere auth
                         .anyRequest().authenticated()
                 )
+
+                // 🔧 FORM LOGIN específico para Angular
                 .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")  // ← Especificar URL explícita
                         .permitAll()
                         .successHandler((request, response, authentication) -> {
-                            // SIEMPRE devolver JSON para Angular, nunca redirect
+                            System.out.println("🎉 SUCCESS HANDLER EJECUTADO!");
                             response.setStatus(200);
                             response.setContentType("application/json");
+                            response.setCharacterEncoding("UTF-8");
                             response.getWriter().write("{\"success\":true,\"message\":\"Login successful\"}");
                         })
                         .failureHandler((request, response, exception) -> {
-                            // Error handler JSON para Angular
+                            System.out.println("💥 FAILURE HANDLER EJECUTADO: " + exception.getMessage());
                             response.setStatus(401);
                             response.setContentType("application/json");
-                            response.getWriter().write("{\"error\":\"Invalid credentials\"}");
+                            response.setCharacterEncoding("UTF-8");
+                            response.getWriter().write("{\"error\":\"Invalid credentials\",\"message\":\"" + exception.getMessage() + "\"}");
                         })
                 )
 
                 .logout(logout -> logout
+                        .logoutUrl("/logout")
                         .permitAll()
                         .logoutSuccessHandler((request, response, authentication) -> {
-                            // Logout handler JSON
+                            System.out.println("👋 LOGOUT HANDLER EJECUTADO!");
                             response.setStatus(200);
                             response.setContentType("application/json");
+                            response.setCharacterEncoding("UTF-8");
                             response.getWriter().write("{\"success\":true,\"message\":\"Logout successful\"}");
                         })
                 )
-                .headers(headers -> headers.frameOptions().disable())
+
                 .build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:4200");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
