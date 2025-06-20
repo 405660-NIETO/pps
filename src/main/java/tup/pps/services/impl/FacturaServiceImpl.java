@@ -199,6 +199,7 @@ public class FacturaServiceImpl implements FacturaService {
         factura.setClienteEmail(facturaDTO.getClienteEmail());
 
         // 6. GUARDAR y obtener ID generado
+        factura.setActivo(true);
         return repository.save(factura);
     }
 

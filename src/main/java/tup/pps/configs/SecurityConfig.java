@@ -14,6 +14,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(cors -> cors.and())
                 .authorizeHttpRequests(auth -> auth
                         // PÚBLICOS (sin login)
                         .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
@@ -78,8 +79,31 @@ public class SecurityConfig {
                         // Todo lo demás requiere auth
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form.permitAll())
-                .csrf(csrf -> csrf.disable())
+                .formLogin(form -> form
+                        .permitAll()
+                        .successHandler((request, response, authentication) -> {
+                            // SIEMPRE devolver JSON para Angular, nunca redirect
+                            response.setStatus(200);
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"success\":true,\"message\":\"Login successful\"}");
+                        })
+                        .failureHandler((request, response, exception) -> {
+                            // Error handler JSON para Angular
+                            response.setStatus(401);
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"error\":\"Invalid credentials\"}");
+                        })
+                )
+
+                .logout(logout -> logout
+                        .permitAll()
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            // Logout handler JSON
+                            response.setStatus(200);
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"success\":true,\"message\":\"Logout successful\"}");
+                        })
+                )
                 .headers(headers -> headers.frameOptions().disable())
                 .build();
     }

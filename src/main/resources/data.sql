@@ -34,23 +34,23 @@ INSERT INTO Roles (nombre, activo) VALUES ('LUTHIER', true);
 
 -- Producto de prueba para update
 INSERT INTO Productos (nombre, comentarios, foto_url, marca_id, stock, precio, activo)
-VALUES ('Guitarra Les Paul', 'Guitarra clásica', 'https://ejemplo.com/lespaul.jpg', 2, 10, 1500.00, true);
+VALUES ('Guitarra Les Paul', 'Guitarra clásica', 'https://http2.mlstatic.com/D_NQ_NP_2X_838632-MLU71136349927_082023-F.webp', 2, 10, 1500.00, true);
 
 -- Productos adicionales para testing
 INSERT INTO Productos (nombre, comentarios, foto_url, marca_id, stock, precio, activo)
-VALUES ('Guitarra RG Series', 'Guitarra eléctrica para rock', 'https://ejemplo.com/ibanez.jpg', 4, 8, 1200.00, false);
+VALUES ('Guitarra RG Series', 'Guitarra eléctrica para rock', 'https://i.ebayimg.com/thumbs/images/g/h5kAAeSwwUBnt4u4/s-l1200.jpg', 4, 8, 1200.00, false);
 
 INSERT INTO Productos (nombre, comentarios, foto_url, marca_id, stock, precio, activo)
-VALUES ('Teclado PSR-E373', 'Teclado digital 61 teclas', 'https://ejemplo.com/yamaha-teclado.jpg', 3, 15, 800.00, true);
+VALUES ('Teclado PSR-E373', 'Teclado digital 61 teclas', 'https://artemusical.com.ar/wp-content/uploads/2024/08/sx7002.jpeg', 3, 15, 800.00, true);
 
 INSERT INTO Productos (nombre, comentarios, foto_url, marca_id, stock, precio, activo)
-VALUES ('Micrófono SM58', 'Micrófono dinámico profesional', 'https://ejemplo.com/mic.jpg', 3, 25, 150.00, true);
+VALUES ('Micrófono SM58', 'Micrófono dinámico profesional', 'https://http2.mlstatic.com/D_NQ_NP_759562-CBT85612450999_062025-O.webp', 3, 25, 150.00, true);
 
 INSERT INTO Productos (nombre, comentarios, foto_url, marca_id, stock, precio, activo)
-VALUES ('Batería Electrónica DTX432K', 'Kit de batería electrónica', 'https://ejemplo.com/yamaha-drums.jpg', 3, 5, 2500.00, true);
+VALUES ('Batería Electrónica DTX432K', 'Kit de batería electrónica', 'https://ar.xprostore.com/image/cache/data/imagenesweb_sec/dtx432k_1-650x650.jpg', 3, 5, 2500.00, true);
 
 INSERT INTO Productos (nombre, comentarios, foto_url, marca_id, stock, precio, activo)
-VALUES ('Guitarra Stratocaster', 'Guitarra eléctrica clásica', 'https://ejemplo.com/fender-strat.jpg', 1, 12, 1800.00, true);
+VALUES ('Guitarra Stratocaster', 'Guitarra eléctrica clásica', 'https://http2.mlstatic.com/D_NQ_NP_665231-MLA85455744650_062025-O.webp', 1, 12, 1800.00, true);
 
 
 -- Relaciones iniciales del producto (ID 1 suponiendo que es el primer producto)
